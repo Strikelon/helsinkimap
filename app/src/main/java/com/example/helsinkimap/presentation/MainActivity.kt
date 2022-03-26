@@ -1,7 +1,8 @@
-package com.example.helsinkimap
+package com.example.helsinkimap.presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.helsinkimap.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

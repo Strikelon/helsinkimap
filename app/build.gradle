@@ -1,19 +1,27 @@
-plugins {
-    id 'com.android.application'
-    id 'kotlin-android'
-}
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'project-report'
+apply plugin: 'kotlin-parcelize'
+apply from: "$rootDir/gradle/build-versions.gradle"
 
 android {
-    compileSdk 31
+    compileSdkVersion config.sdk.compile
 
     defaultConfig {
         applicationId "com.example.helsinkimap"
-        minSdk 21
-        targetSdk 31
-        versionCode 1
-        versionName "1.0"
 
+        minSdkVersion config.sdk.min
+        targetSdkVersion config.sdk.target
+        versionCode config.build.code
+        versionName config.build.name
+
+        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildFeatures {
+        viewBinding true
     }
 
     buildTypes {
@@ -33,11 +41,59 @@ android {
 
 dependencies {
 
+    /* Kotlin */
+    implementation lib.kotlinStd
+
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.5.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
-    testImplementation 'junit:junit:4.+'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    /* Support Libraries */
+    implementation lib.androidXCoreKtx
+    implementation lib.androidXFragment
+    implementation lib.androidXAppCompat
+    implementation lib.androidXMaterial
+    implementation lib.androidXRecyclerView
+    implementation lib.androidXMultidex
+    implementation lib.androidXConstraintlayout
+
+    /* Lifecycle */
+    implementation lib.lifecycleViewModel
+    implementation lib.lifecycleSavedState
+    implementation lib.lifecycleLiveData
+    implementation lib.lifecycleProcess
+
+    /* Google play services */
+    implementation lib.googleMaps
+    implementation lib.googleLocation
+
+    /* Network */
+    implementation lib.okHttp
+    implementation lib.okHttpInterceptor
+    implementation lib.retrofit
+    implementation lib.retrofit2moshi
+    implementation lib.retrofitRxAdapter
+
+    /* Moshi */
+    implementation lib.moshi
+    implementation lib.moshiKotlinAnnotation
+    implementation lib.moshiKotlin
+
+    /* UI */
+    implementation lib.glide
+
+    /* Dependency Injection */
+    implementation lib.dagger
+    implementation lib.daggerProducer
+    kapt lib.daggerCompiler
+
+    /* Rx */
+    implementation lib.rxJava
+    implementation lib.rxAndroid
+    implementation lib.rxRelay
+
+    testImplementation lib.junit
+    androidTestImplementation lib.junitExt
+    androidTestImplementation lib.espresso
 }

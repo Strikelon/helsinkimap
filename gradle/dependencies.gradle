@@ -1,0 +1,61 @@
+ext.versions = [
+        /*APPLICATION DEPENDENCIES*/
+        kotlin: '1.6.0',
+        verGradle: '7.0.3',
+        googleServices: '4.3.4'
+]
+
+ext.lib = [
+        /* Kotlin */
+        kotlinStd               : "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin",
+
+        /* AndroidX */
+        androidXCore            : "androidx.core:core-ktx:1.7.0",
+        androidXCoreKtx         : "androidx.core:core-ktx:1.7.0",
+        androidXFragment        : "androidx.fragment:fragment-ktx:1.2.5",
+        androidXAppCompat       : "androidx.appcompat:appcompat:1.4.1",
+        androidXMaterial        : "com.google.android.material:material:1.5.0",
+        androidXMultidex        : "androidx.multidex:multidex:2.0.0",
+        androidXConstraintlayout: "androidx.constraintlayout:constraintlayout:2.1.3",
+        androidXRecyclerView    : "androidx.recyclerview:recyclerview:1.1.0",
+
+        /* Lifecycle */
+        lifecycleViewModel      : "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1",
+        lifecycleSavedState     : "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.1",
+        lifecycleLiveData       : "androidx.lifecycle:lifecycle-livedata-ktx:2.3.1",
+        lifecycleProcess        : "androidx.lifecycle:lifecycle-process:2.3.1",
+
+        /* Google play services */
+        googleMaps               : "com.google.android.gms:play-services-maps:17.0.0",
+        googleLocation           : "com.google.android.gms:play-services-location:17.0.0",
+
+        /* Network */
+        okHttp                  : "com.squareup.okhttp3:okhttp:4.9.1",
+        okHttpInterceptor       : "com.squareup.okhttp3:logging-interceptor:4.9.1",
+        retrofit                : "com.squareup.retrofit2:retrofit:2.9.0",
+        retrofitRxAdapter       : "com.squareup.retrofit2:adapter-rxjava2:2.9.0",
+        retrofit2moshi          : "com.squareup.retrofit2:converter-moshi:2.9.0",
+
+        /* Moshi */
+        moshi                   : "com.squareup.moshi:moshi:1.12.0",
+        moshiKotlinAnnotation   : "com.squareup.moshi:moshi-kotlin-codegen:1.12.0",
+        moshiKotlin             : "com.squareup.moshi:moshi-kotlin:1.12.0",
+
+        /* UI */
+        glide                   : "com.github.bumptech.glide:glide:4.12.0",
+
+        /* Dependency Injection */
+        dagger                  : "com.google.dagger:dagger:2.39.1",
+        daggerProducer          : "com.google.dagger:dagger-producers:2.39.1",
+        daggerCompiler          : "com.google.dagger:dagger-compiler:2.39.1",
+
+        /* Rx */
+        rxJava                  : "io.reactivex.rxjava2:rxjava:2.2.21",
+        rxAndroid               : "io.reactivex.rxjava2:rxandroid:2.1.1",
+        rxRelay                 : "com.jakewharton.rxrelay2:rxrelay:2.1.1",
+
+        /* Test */
+        junit                   : "junit:junit:4.12",
+        junitExt                : "androidx.test.ext:junit:1.1.3",
+        espresso                : "androidx.test.espresso:espresso-core:3.4.0"
+]
