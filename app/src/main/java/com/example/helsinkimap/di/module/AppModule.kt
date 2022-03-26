@@ -2,8 +2,10 @@ package com.example.helsinkimap.di.module
 
 import android.content.Context
 import com.example.helsinkimap.HelsinkiApplication
+import com.example.helsinkimap.domain.navigation.MainRouter
 import dagger.Module
 import dagger.Provides
+import ru.terrakok.cicerone.Cicerone
 import javax.inject.Singleton
 
 @Module
@@ -19,16 +21,19 @@ class AppModule(
      */
     @Provides
     @Singleton
-    fun provideApplication(): HelsinkiApplication {
-        return application
-    }
+    fun provideApplication(): HelsinkiApplication = application
 
     /**
      * Provides context instance injecting.
      */
     @Provides
     @Singleton
-    fun provideContext(): Context {
-        return application
-    }
+    fun provideContext(): Context = application
+
+    @Provides
+    @Singleton
+    /**
+     * Provides MainRouter for navigation through fragments of MainActivity
+     */
+    fun provideCiceroni(): MainRouter = MainRouter(Cicerone.create())
 }

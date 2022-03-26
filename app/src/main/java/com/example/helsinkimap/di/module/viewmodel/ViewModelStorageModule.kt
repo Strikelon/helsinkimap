@@ -1,7 +1,7 @@
 package com.example.helsinkimap.di.module.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.example.helsinkimap.presentation.di.AssistedSavedStateViewModelFactory
+import com.example.helsinkimap.presentation.arch.di.AssistedSavedStateViewModelFactory
 import dagger.Module
 import dagger.multibindings.Multibinds
 

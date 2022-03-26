@@ -1,4 +1,4 @@
-package com.example.helsinkimap.presentation.di
+package com.example.helsinkimap.presentation.arch.di
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel

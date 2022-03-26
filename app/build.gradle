@@ -59,6 +59,7 @@ dependencies {
     /* Support Libraries */
     implementation lib.androidXCoreKtx
     implementation lib.androidXFragment
+    implementation lib.androidXActivity
     implementation lib.androidXAppCompat
     implementation lib.androidXMaterial
     implementation lib.androidXRecyclerView
