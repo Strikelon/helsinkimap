@@ -93,6 +93,9 @@ dependencies {
     implementation lib.rxAndroid
     implementation lib.rxRelay
 
+    /* Screen Navigation */
+    implementation lib.cicerone
+
     testImplementation lib.junit
     androidTestImplementation lib.junitExt
     androidTestImplementation lib.espresso
