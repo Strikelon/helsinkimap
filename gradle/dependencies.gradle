@@ -10,7 +10,7 @@ ext.lib = [
         kotlinStd               : "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin",
 
         /* AndroidX */
-        androidXCore            : "androidx.core:core-ktx:1.7.0",
+        androidXCore            : "androidx.core:core:1.7.0",
         androidXCoreKtx         : "androidx.core:core-ktx:1.7.0",
         androidXFragment        : "androidx.fragment:fragment-ktx:1.2.5",
         androidXActivity        : "androidx.activity:activity-ktx:1.3.1",

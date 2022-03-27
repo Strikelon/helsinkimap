@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">helsinkimap</string>
+    <string name="google_maps_key">AIzaSyCVWjX0BUIFO72cUED9r4RSoZdc_s1nGDk</string>
 </resources>
