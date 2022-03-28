@@ -1,17 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
+        android:id="@+id/poiTitle"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Fragment details"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="Title"
+        android:textSize="@dimen/details_title_size"
+        android:layout_marginTop="@dimen/details_title_margin_top"
+        android:layout_marginStart="@dimen/details_text_margin"
+        android:layout_marginEnd="@dimen/details_text_margin"
+        android:textStyle="bold"
+        android:textColor="@color/details_poi_color"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/poiAddress"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        tools:text="Address Address Address Address Address Address Address"
+        android:textSize="@dimen/details_text_size"
+        android:layout_marginTop="@dimen/details_text_margin_top"
+        android:layout_marginStart="@dimen/details_text_margin"
+        android:layout_marginEnd="@dimen/details_text_margin"
+        android:textColor="@color/details_poi_color"
+        app:layout_constraintTop_toBottomOf="@+id/poiTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/poiLink"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        tools:text="https://open-api.myhelsinki.fi/"
+        android:textSize="@dimen/details_text_size"
+        android:layout_marginTop="@dimen/details_text_margin_top"
+        android:layout_marginStart="@dimen/details_text_margin"
+        android:layout_marginEnd="@dimen/details_text_margin"
+        android:autoLink="web"
+        app:layout_constraintTop_toBottomOf="@+id/poiAddress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/poiDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        tools:text="Kuninkaantie on Suomen toiseksi vanhin maantie läpi Etelä-Suomen. Retkipäivä alka hotelliltasi Fagervikin ruukin kautta Fiskarsin ruukkiin ja takaisin hotellillesi. Matkan aikana kuulet Suomen historiaa, näet kauniita maalaismaisemia sekä tutustut vanhoihin ruukkeihin. Retki sisältää opastuksen, kahvin ja sämpylän sekä kuljetuksen. Fiskarsin ruukissa on myös mahdollisuus tehdä ostoksia."
+        android:textSize="@dimen/details_text_size"
+        android:layout_marginTop="@dimen/details_text_margin_top"
+        android:layout_marginStart="@dimen/details_text_margin"
+        android:layout_marginEnd="@dimen/details_text_margin"
+        android:textColor="@color/details_poi_color"
+        app:layout_constraintTop_toBottomOf="@+id/poiLink"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

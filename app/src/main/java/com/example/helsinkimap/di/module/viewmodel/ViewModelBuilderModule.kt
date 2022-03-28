@@ -2,6 +2,7 @@ package com.example.helsinkimap.di.module.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.example.helsinkimap.di.qualifier.ViewModelKey
+import com.example.helsinkimap.presentation.arch.di.AssistedSavedStateViewModelFactory
 import com.example.helsinkimap.presentation.details.DetailsViewModel
 import com.example.helsinkimap.presentation.map.MapViewModel
 import com.example.helsinkimap.presentation.permission.PermissionViewModel
@@ -25,5 +26,5 @@ interface ViewModelBuilderModule {
     @Binds
     @IntoMap
     @ViewModelKey(DetailsViewModel::class)
-    fun bindsDetailsViewModel(vm: DetailsViewModel): ViewModel
+    fun bindsDetailsViewModel(f: DetailsViewModel.Factory): AssistedSavedStateViewModelFactory<out ViewModel>
 }

@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import com.example.helsinkimap.presentation.details.DetailsMvvmFragment
 import com.example.helsinkimap.presentation.map.MapMvvmFragment
 import com.example.helsinkimap.presentation.permission.PermissionMvvmFragment
+import com.example.helsinkimap.specs.entity.ActivityDto
 import ru.terrakok.cicerone.android.support.SupportAppScreen
 
 object MainScreens {
@@ -19,8 +20,8 @@ object MainScreens {
         override fun getFragment(): Fragment = MapMvvmFragment.newInstance()
     }
 
-    object DetailsScreen : SupportAppScreen() {
-        override fun getFragment(): Fragment = DetailsMvvmFragment.newInstance()
+    class DetailsScreen(private val cityActivityDto: ActivityDto) : SupportAppScreen() {
+        override fun getFragment(): Fragment = DetailsMvvmFragment.newInstance(cityActivityDto)
     }
 
     object AppSystemSettingsScreen : SupportAppScreen() {

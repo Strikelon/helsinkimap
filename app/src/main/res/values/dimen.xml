@@ -20,4 +20,9 @@
     <dimen name="details_button_margin">24dp</dimen>
     <dimen name="details_button_top_bottom_margin">20dp</dimen>
     <dimen name="details_button_text_size">16sp</dimen>
+    <dimen name="details_title_size">20sp</dimen>
+    <dimen name="details_text_size">18sp</dimen>
+    <dimen name="details_title_margin_top">20dp</dimen>
+    <dimen name="details_text_margin_top">16dp</dimen>
+    <dimen name="details_text_margin">20dp</dimen>
 </resources>

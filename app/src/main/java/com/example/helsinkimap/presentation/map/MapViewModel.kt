@@ -117,7 +117,9 @@ class MapViewModel @Inject constructor(
     }
 
     fun openDetailsScreen() {
-        mainRouter.openDetailsScreen()
+        selectedCityActivity?.let { selectedCityActivityNotNull ->
+            mainRouter.openDetailsScreen(selectedCityActivityNotNull)
+        }
     }
 
     companion object {
