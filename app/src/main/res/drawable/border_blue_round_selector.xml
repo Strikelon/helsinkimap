@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_enabled="false"
-        android:drawable="@drawable/permission_refuse_ripple_background" />
-    <item android:drawable="@drawable/permission_refuse_white_ripple_background" />
+        android:drawable="@drawable/border_blue_ripple_background" />
+    <item android:drawable="@drawable/border_blue_white_ripple_background" />
 </selector>

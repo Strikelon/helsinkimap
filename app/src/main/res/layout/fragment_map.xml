@@ -14,14 +14,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/detailsButton"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Fragment map"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="@dimen/details_button_margin"
+        android:layout_marginEnd="@dimen/details_button_margin"
+        android:layout_marginBottom="@dimen/details_button_top_bottom_margin"
+        android:text="@string/details_button"
+        android:background="@drawable/blue_button_selector"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/details_button_text_size"
+        android:textStyle="bold"
+        android:stateListAnimator="@null"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

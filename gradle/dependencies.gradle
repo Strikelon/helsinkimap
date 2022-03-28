@@ -1,6 +1,6 @@
 ext.versions = [
         /*APPLICATION DEPENDENCIES*/
-        kotlin: '1.6.0',
+        kotlin: '1.5.10',
         verGradle: '7.0.3',
         googleServices: '4.3.4'
 ]

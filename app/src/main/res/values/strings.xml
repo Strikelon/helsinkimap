@@ -8,4 +8,11 @@
     <string name="permission_app_use_location">HelsinkiMap should use your Precise location.\n\nTo give permission please go to the Settings > Permissions and allow Location</string>
     <string name="permission_settings">Settings</string>
     <string name="permission_deny">Deny</string>
+    <string name="details_button">Show Details</string>
+    <string name="error">Error</string>
+    <string name="network_error">Network error occurred</string>
+    <string name="gps_use_error">Gps error occurred</string>
+    <string name="app_needs_permission">App needs precise location permission</string>
+    <string name="gps_disabled">GPS is disabled. Please enable gps</string>
+    <string name="ok">OK</string>
 </resources>
