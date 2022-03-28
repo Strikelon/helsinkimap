@@ -8,4 +8,5 @@ class MainRouter(cicerone: Cicerone<Router>) : BaseRouter(cicerone) {
     fun openPermissionScreen() = router.newRootScreen(MainScreens.PermissionScreen)
     fun openMapScreen() = router.newRootScreen(MainScreens.MapScreen)
     fun openDetailsScreen() = router.navigateTo(MainScreens.DetailsScreen)
+    fun openAppSystemSettingsScreen() = router.navigateTo(MainScreens.AppSystemSettingsScreen)
 }

@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">helsinkimap</string>
     <string name="google_maps_key">AIzaSyCVWjX0BUIFO72cUED9r4RSoZdc_s1nGDk</string>
+    <string name="permission_preview_title">Helsinki Map requires Precise Location permission</string>
+    <string name="permission_preview_body">Please accept Precise location permission request. It requires for correct application work.</string>
+    <string name="permission_button_refuse">Refuse</string>
+    <string name="permission_button_accept">Accept</string>
+    <string name="permission_app_use_location">HelsinkiMap should use your Precise location.\n\nTo give permission please go to the Settings > Permissions and allow Location</string>
+    <string name="permission_settings">Settings</string>
+    <string name="permission_deny">Deny</string>
 </resources>

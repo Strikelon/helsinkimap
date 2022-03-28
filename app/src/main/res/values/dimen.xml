@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin_normal">4dp</dimen>
+    <dimen name="margin_medium">6dp</dimen>
+    <dimen name="margin_large">10dp</dimen>
+    <dimen name="margin_mlarge">12dp</dimen>
+    <dimen name="margin_xlarge">16dp</dimen>
+    <dimen name="permission_preview_title_size">20sp</dimen>
+    <dimen name="permission_title_text_margin_top">28dp</dimen>
+    <dimen name="permission_preview_text_size">18sp</dimen>
+    <dimen name="permission_preview_text_margin_top">16dp</dimen>
+    <dimen name="permission_preview_text_margin_start">20dp</dimen>
+    <dimen name="permission_preview_text_margin_end">20dp</dimen>
+    <dimen name="permission_button_margin">16dp</dimen>
+    <dimen name="permission_button_top_bottom_margin">20dp</dimen>
+    <dimen name="permission_button_text_size">16sp</dimen>
+    <dimen name="permission_button_stroke_width">2dp</dimen>
+    <dimen name="permission_button_radius">15dp</dimen>
+    <dimen name="progress_bar_size">50dp</dimen>
+</resources>

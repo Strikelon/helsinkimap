@@ -7,4 +7,11 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="location_permission_color">#43576C</color>
+    <color name="permission_refuse_button_color">#32B4DF</color>
+    <color name="permission_allow_button_color">#72C7D2</color>
+    <color name="permission_button_gray_color">#BBC9DB</color>
+    <color name="common_background">#ffffff</color>
+    <color name="common_background_transparent">#80000000</color>
+    <color name="primary_light">#e3f2f8</color>
 </resources>
