@@ -4,6 +4,9 @@ import android.os.Build
 import android.text.Html
 import android.text.Spanned
 import android.view.View
+import android.widget.ImageView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.BaseRequestOptions
 
 val View.isVisible get() = visibility == View.VISIBLE
 
@@ -57,3 +60,8 @@ fun String.toHtml(): Spanned {
         Html.fromHtml(this)
     }
 }
+
+fun ImageView.loadImage(url: String?, requestOptions: BaseRequestOptions<*>) = Glide.with(context)
+    .load(url)
+    .apply(requestOptions)
+    .into(this)

@@ -3,11 +3,14 @@ package com.example.helsinkimap.presentation.details
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.helsinkimap.core.ext.setVisible
 import com.example.helsinkimap.core.ext.toHtml
 import com.example.helsinkimap.databinding.FragmentDetailsBinding
 import com.example.helsinkimap.presentation.arch.BaseMvvmFragment
 import com.example.helsinkimap.presentation.arch.delegate.FragmentArgumentDelegate
 import com.example.helsinkimap.specs.entity.ActivityDto
+import com.example.helsinkimap.specs.entity.ActivityImageLinkDto
 
 class DetailsMvvmFragment : BaseMvvmFragment() {
 
@@ -18,9 +21,21 @@ class DetailsMvvmFragment : BaseMvvmFragment() {
         ARGUMENT_SELECTED_CITY_ACTIVITY
     )
 
+    private val poiDetailsRecyclerViewAdapter: PoiDetailsRecyclerViewAdapter by lazy {
+        PoiDetailsRecyclerViewAdapter(
+            requireContext()
+        )
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         activityComponent().inject(this)
         super.onViewCreated(view, savedInstanceState)
+        with(binding) {
+            poiDetailsRecyclerView.apply {
+                layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+                adapter = poiDetailsRecyclerViewAdapter
+            }
+        }
     }
 
     override fun observeLiveData() {
@@ -39,6 +54,18 @@ class DetailsMvvmFragment : BaseMvvmFragment() {
             poiAddress.text = address
             poiLink.text = activityDto.infoUrl
             poiDescription.text = activityDto.description.toHtml()
+            showImages(activityDto.imageLinkList)
+        }
+    }
+
+    private fun showImages(imageUrlList: List<ActivityImageLinkDto>) {
+        with(binding) {
+            if (imageUrlList.isEmpty()) {
+                poiDetailsRecyclerView.setVisible(false)
+            } else {
+                poiDetailsRecyclerView.setVisible(true)
+                poiDetailsRecyclerViewAdapter.setData(imageUrlList)
+            }
         }
     }
 

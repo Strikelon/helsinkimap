@@ -25,4 +25,5 @@
     <dimen name="details_title_margin_top">20dp</dimen>
     <dimen name="details_text_margin_top">16dp</dimen>
     <dimen name="details_text_margin">20dp</dimen>
+    <dimen name="poi_image_size">100dp</dimen>
 </resources>
