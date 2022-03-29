@@ -29,7 +29,6 @@ class MapViewModel @Inject constructor(
     init {
         observeLocationFlowable()
         observeCityActivitiesFlowable()
-        observeGpsErrorFlowable()
     }
 
     override fun attach() {
@@ -76,7 +75,6 @@ class MapViewModel @Inject constructor(
                 }
             )
             .unsubscribeOnDestroy()
-        observeLocationFlowable()
     }
 
     private fun observeGpsErrorFlowable() {
