@@ -88,7 +88,7 @@ dependencies {
 
     /* Moshi */
     implementation lib.moshi
-    implementation lib.moshiKotlinAnnotation
+    kapt lib.moshiKotlinAnnotation
     implementation lib.moshiKotlin
 
     /* UI */

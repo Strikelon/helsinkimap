@@ -1,6 +1,6 @@
 ext.versions = [
         /*APPLICATION DEPENDENCIES*/
-        kotlin: '1.5.10',
+        kotlin: '1.6.0',
         verGradle: '7.0.3',
         googleServices: '4.3.4'
 ]
@@ -38,9 +38,9 @@ ext.lib = [
         retrofit2moshi          : "com.squareup.retrofit2:converter-moshi:2.9.0",
 
         /* Moshi */
-        moshi                   : "com.squareup.moshi:moshi:1.12.0",
-        moshiKotlinAnnotation   : "com.squareup.moshi:moshi-kotlin-codegen:1.12.0",
-        moshiKotlin             : "com.squareup.moshi:moshi-kotlin:1.12.0",
+        moshi                   : "com.squareup.moshi:moshi:1.13.0",
+        moshiKotlinAnnotation   : "com.squareup.moshi:moshi-kotlin-codegen:1.13.0",
+        moshiKotlin             : "com.squareup.moshi:moshi-kotlin:1.13.0",
 
         /* UI */
         glide                   : "com.github.bumptech.glide:glide:4.12.0",
