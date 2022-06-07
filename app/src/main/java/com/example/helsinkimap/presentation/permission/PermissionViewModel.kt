@@ -5,8 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import com.example.helsinkimap.domain.navigation.MainRouter
 import com.example.helsinkimap.presentation.arch.viewmodel.MvvmViewModel
 import com.example.helsinkimap.presentation.arch.viewmodel.SingleLiveData
+import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
+@HiltViewModel
 class PermissionViewModel @Inject constructor(
     private val mainRouter: MainRouter
 ) : MvvmViewModel() {

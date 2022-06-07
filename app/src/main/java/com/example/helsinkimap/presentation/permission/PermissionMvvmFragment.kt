@@ -15,7 +15,9 @@ import com.example.helsinkimap.R
 import com.example.helsinkimap.core.ext.setVisible
 import com.example.helsinkimap.databinding.FragmentPermissionsBinding
 import com.example.helsinkimap.presentation.arch.BaseMvvmFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class PermissionMvvmFragment : BaseMvvmFragment() {
 
     override val viewModel: PermissionViewModel by viewModels()
@@ -39,7 +41,6 @@ class PermissionMvvmFragment : BaseMvvmFragment() {
         }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        activityComponent().inject(this)
         super.onViewCreated(view, savedInstanceState)
         with(binding) {
             refuseButton.setOnClickListener {

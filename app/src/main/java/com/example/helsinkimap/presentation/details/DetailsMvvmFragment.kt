@@ -11,7 +11,9 @@ import com.example.helsinkimap.presentation.arch.BaseMvvmFragment
 import com.example.helsinkimap.presentation.arch.delegate.FragmentArgumentDelegate
 import com.example.helsinkimap.specs.entity.ActivityDto
 import com.example.helsinkimap.specs.entity.ActivityImageLinkDto
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class DetailsMvvmFragment : BaseMvvmFragment() {
 
     override val viewModel: DetailsViewModel by viewModels()
@@ -28,7 +30,6 @@ class DetailsMvvmFragment : BaseMvvmFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        activityComponent().inject(this)
         super.onViewCreated(view, savedInstanceState)
         with(binding) {
             poiDetailsRecyclerView.apply {

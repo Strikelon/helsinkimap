@@ -8,20 +8,14 @@ import androidx.annotation.CallSuper
 import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.HasDefaultViewModelProviderFactory
-import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
-import com.example.helsinkimap.di.module.ActivityModule
-import com.example.helsinkimap.di.module.Injector
-import com.example.helsinkimap.di.module.component.ActivityComponent
 import com.example.helsinkimap.presentation.arch.common.NestedInflater
 import com.example.helsinkimap.presentation.arch.common.terminalInflater
 import com.example.helsinkimap.presentation.arch.delegate.LifecycleDelegate
 import com.example.helsinkimap.presentation.arch.delegate.StateLifecycleDelegate
 import com.example.helsinkimap.presentation.arch.di.BindingFactory
-import com.example.helsinkimap.presentation.arch.di.InjectingSavedStateViewModelFactory
 import com.example.helsinkimap.presentation.arch.viewmodel.MvvmViewModel
 import com.example.helsinkimap.presentation.common.delegate.ViewBindingDelegate
-import javax.inject.Inject
 
 abstract class BaseMvvmFragment() : Fragment(), HasDefaultViewModelProviderFactory, NestedInflater {
 
@@ -57,19 +51,6 @@ abstract class BaseMvvmFragment() : Fragment(), HasDefaultViewModelProviderFacto
 
     /* MVVM */
     protected abstract val viewModel: MvvmViewModel
-
-    @Inject
-    lateinit var defaultViewModelFactory: InjectingSavedStateViewModelFactory
-
-    /**
-     * This method androidx uses for `by viewModels` method.
-     * We can set out injecting factory here and therefore don't touch it again
-     */
-    override fun getDefaultViewModelProviderFactory(): ViewModelProvider.Factory =
-        defaultViewModelFactory.create(this, arguments)
-
-    protected fun activityComponent(): ActivityComponent =
-        Injector.projectComponent.activityComponent(ActivityModule())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

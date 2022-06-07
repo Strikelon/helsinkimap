@@ -11,8 +11,10 @@ import com.example.helsinkimap.specs.api.interactors.MapInteractorApi
 import com.example.helsinkimap.specs.entity.ActivityDto
 import com.example.helsinkimap.specs.entity.ErrorTypes
 import com.google.android.gms.maps.model.LatLng
+import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
+@HiltViewModel
 class MapViewModel @Inject constructor(
     private val mapInteractorApi: MapInteractorApi,
     private val mainRouter: MainRouter

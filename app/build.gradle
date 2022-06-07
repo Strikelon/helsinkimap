@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'project-report'
 apply plugin: 'kotlin-parcelize'
+apply plugin: 'dagger.hilt.android.plugin'
 apply from: "$rootDir/gradle/build-versions.gradle"
 
 android {
@@ -95,9 +96,8 @@ dependencies {
     implementation lib.glide
 
     /* Dependency Injection */
-    implementation lib.dagger
-    implementation lib.daggerProducer
-    kapt lib.daggerCompiler
+    implementation lib.daggerHilt
+    kapt lib.daggerHiltKapt
 
     /* Rx */
     implementation lib.rxJava

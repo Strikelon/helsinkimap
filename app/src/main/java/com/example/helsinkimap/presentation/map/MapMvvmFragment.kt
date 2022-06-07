@@ -20,7 +20,9 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MapMvvmFragment : BaseMvvmFragment(), OnMapReadyCallback {
 
     override val viewModel: MapViewModel by viewModels()
@@ -30,7 +32,6 @@ class MapMvvmFragment : BaseMvvmFragment(), OnMapReadyCallback {
     private var currentPositionMarker: Marker? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        activityComponent().inject(this)
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as? SupportMapFragment
         mapFragment?.getMapAsync(this)

@@ -2,7 +2,8 @@ ext.versions = [
         /*APPLICATION DEPENDENCIES*/
         kotlin: '1.6.0',
         verGradle: '7.0.3',
-        googleServices: '4.3.4'
+        googleServices: '4.3.4',
+        hilt: '2.40.5'
 ]
 
 ext.lib = [
@@ -46,9 +47,8 @@ ext.lib = [
         glide                   : "com.github.bumptech.glide:glide:4.12.0",
 
         /* Dependency Injection */
-        dagger                  : "com.google.dagger:dagger:2.39.1",
-        daggerProducer          : "com.google.dagger:dagger-producers:2.39.1",
-        daggerCompiler          : "com.google.dagger:dagger-compiler:2.39.1",
+        daggerHilt              : "com.google.dagger:hilt-android:2.40.5",
+        daggerHiltKapt          : "com.google.dagger:hilt-compiler:2.40.5",
 
         /* Rx */
         rxJava                  : "io.reactivex.rxjava2:rxjava:2.2.21",

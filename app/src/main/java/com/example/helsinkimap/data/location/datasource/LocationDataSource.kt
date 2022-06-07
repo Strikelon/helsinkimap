@@ -16,6 +16,7 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
 import com.jakewharton.rxrelay2.PublishRelay
+import dagger.hilt.android.qualifiers.ApplicationContext
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Observable
@@ -25,6 +26,7 @@ import javax.inject.Singleton
 
 @Singleton
 class LocationDataSource @Inject constructor(
+    @ApplicationContext
     private val context: Context
 ) {
     private val gpsErrorRelay: PublishRelay<ErrorTypes> = PublishRelay.create()

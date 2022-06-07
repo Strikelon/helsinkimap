@@ -4,10 +4,11 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.HasDefaultViewModelProviderFactory
 import com.example.helsinkimap.R
-import com.example.helsinkimap.di.module.Injector
 import com.example.helsinkimap.domain.navigation.MainRouter
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity(), HasDefaultViewModelProviderFactory {
 
     @Inject
@@ -19,7 +20,6 @@ class MainActivity : AppCompatActivity(), HasDefaultViewModelProviderFactory {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        Injector.projectComponent.inject(this)
     }
 
     override fun onResume() {

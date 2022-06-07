@@ -1,7 +1,5 @@
 package com.example.helsinkimap.di.module
 
-import android.content.Context
-import com.example.helsinkimap.HelsinkiApplication
 import com.example.helsinkimap.data.location.datasource.LocationDataSource
 import com.example.helsinkimap.data.network.datasource.NetworkApiDatasource
 import com.example.helsinkimap.data.repository.CityEntertainmentRepository
@@ -15,31 +13,15 @@ import com.example.helsinkimap.specs.api.repositories.CityEntertainmentRepositor
 import com.example.helsinkimap.specs.api.repositories.LocationRepositoryApi
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import ru.terrakok.cicerone.Cicerone
 import javax.inject.Singleton
 
 @Module
+@InstallIn(SingletonComponent::class)
 class AppModule(
-    /**
-     * Application instance.
-     */
-    private val application: HelsinkiApplication
 ) {
-
-    /**
-     * Provides application instance injecting.
-     */
-    @Provides
-    @Singleton
-    fun provideApplication(): HelsinkiApplication = application
-
-    /**
-     * Provides context instance injecting.
-     */
-    @Provides
-    @Singleton
-    fun provideContext(): Context = application
-
     /**
      * Provides MainRouter for navigation through fragments of MainActivity
      */
