@@ -4,6 +4,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'project-report'
 apply plugin: 'kotlin-parcelize'
 apply plugin: 'dagger.hilt.android.plugin'
+apply plugin: 'androidx.navigation.safeargs.kotlin'
 apply from: "$rootDir/gradle/build-versions.gradle"
 
 android {
@@ -105,7 +106,8 @@ dependencies {
     implementation lib.rxRelay
 
     /* Screen Navigation */
-    implementation lib.cicerone
+    implementation lib.navigationFragment
+    implementation lib.navigationUI
 
     /* Tests */
     testImplementation lib.junit

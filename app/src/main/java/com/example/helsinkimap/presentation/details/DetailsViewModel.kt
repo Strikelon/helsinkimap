@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import com.example.helsinkimap.presentation.arch.viewmodel.MvvmViewModel
 import com.example.helsinkimap.presentation.arch.viewmodel.SingleLiveData
-import com.example.helsinkimap.presentation.details.DetailsMvvmFragment.Companion.ARGUMENT_SELECTED_CITY_ACTIVITY
 import com.example.helsinkimap.specs.entity.ActivityDto
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -25,5 +24,9 @@ class DetailsViewModel @Inject constructor(
         cityActivityDto?.let {
             poiEvent.postValue(it)
         }
+    }
+
+    companion object {
+        private const val ARGUMENT_SELECTED_CITY_ACTIVITY = "argument_selected_city_activity"
     }
 }

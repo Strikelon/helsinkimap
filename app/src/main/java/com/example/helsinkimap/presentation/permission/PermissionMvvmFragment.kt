@@ -11,10 +11,14 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.helsinkimap.R
 import com.example.helsinkimap.core.ext.setVisible
+import com.example.helsinkimap.core.navigation.exitApp
+import com.example.helsinkimap.core.navigation.openApplicationDetailsSettings
 import com.example.helsinkimap.databinding.FragmentPermissionsBinding
 import com.example.helsinkimap.presentation.arch.BaseMvvmFragment
+import com.example.helsinkimap.specs.entity.NavigationEvent
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -60,6 +64,7 @@ class PermissionMvvmFragment : BaseMvvmFragment() {
             requestForegroundPermissionsEvent.observe(viewLifecycleOwner) { requestForegroundPermissions() }
             buttonsEnabledState.observe(viewLifecycleOwner) { setButtonsEnabled(it) }
             checkPermissionsEvent.observe(viewLifecycleOwner) { checkPermissions() }
+            navigationEvent.observe(viewLifecycleOwner) { handleNavigationEvent(it) }
         }
     }
 
@@ -136,6 +141,24 @@ class PermissionMvvmFragment : BaseMvvmFragment() {
         ).show(childFragmentManager, PERMISSION_DIALOG_FRAGMENT_TAG)
     }
 
+    private fun handleNavigationEvent(navigationEvent: NavigationEvent) {
+        when(navigationEvent) {
+            is NavigationEvent.OpenMapScreen -> {
+                val direction = PermissionMvvmFragmentDirections.actionPermissionMvvmFragmentToMapMvvmFragment()
+                findNavController().navigate(direction)
+            }
+            is NavigationEvent.OpenAppSystemSettingsScreen -> {
+                openApplicationDetailsSettings()
+            }
+            is NavigationEvent.Exit -> {
+                exitApp()
+            }
+            else -> {
+                // nothing to do
+            }
+        }
+    }
+
     class NeedPermissionDialogFragment(
         val positiveAction: () -> (Unit)
     ) : DialogFragment() {
@@ -151,7 +174,5 @@ class PermissionMvvmFragment : BaseMvvmFragment() {
 
     companion object {
         private const val PERMISSION_DIALOG_FRAGMENT_TAG = "permission_dialog_fragment_tag"
-
-        fun newInstance() = PermissionMvvmFragment()
     }
 }

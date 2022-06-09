@@ -7,7 +7,6 @@ import com.example.helsinkimap.data.repository.LocationRepository
 import com.example.helsinkimap.data.scheduler.AppSchedulers
 import com.example.helsinkimap.data.scheduler.SchedulersProvider
 import com.example.helsinkimap.domain.interactor.MapInteractor
-import com.example.helsinkimap.domain.navigation.MainRouter
 import com.example.helsinkimap.specs.api.interactors.MapInteractorApi
 import com.example.helsinkimap.specs.api.repositories.CityEntertainmentRepositoryApi
 import com.example.helsinkimap.specs.api.repositories.LocationRepositoryApi
@@ -15,20 +14,12 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import ru.terrakok.cicerone.Cicerone
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 class AppModule(
 ) {
-    /**
-     * Provides MainRouter for navigation through fragments of MainActivity
-     */
-    @Provides
-    @Singleton
-    fun provideCiceroni(): MainRouter = MainRouter(Cicerone.create())
-
     /**
      * Provides Schedulers for switching threads in interactors
      */

@@ -6,12 +6,14 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.helsinkimap.R
 import com.example.helsinkimap.core.ext.setVisible
 import com.example.helsinkimap.databinding.FragmentMapBinding
 import com.example.helsinkimap.presentation.arch.BaseMvvmFragment
 import com.example.helsinkimap.specs.entity.ActivityDto
 import com.example.helsinkimap.specs.entity.ErrorTypes
+import com.example.helsinkimap.specs.entity.NavigationEvent
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -52,6 +54,7 @@ class MapMvvmFragment : BaseMvvmFragment(), OnMapReadyCallback {
                 )
             }
             errorEvent.observe(viewLifecycleOwner) { handleErrorEvent(it) }
+            navigationEvent.observe(viewLifecycleOwner) { handleNavigationEvent(it) }
         }
     }
 
@@ -175,6 +178,18 @@ class MapMvvmFragment : BaseMvvmFragment(), OnMapReadyCallback {
         ).show(childFragmentManager, ERROR_DIALOG_FRAGMENT_TAG)
     }
 
+    private fun handleNavigationEvent(navigationEvent: NavigationEvent) {
+        when(navigationEvent) {
+            is NavigationEvent.OpenDetailsScreen -> {
+                val direction = MapMvvmFragmentDirections.actionMapMvvmFragmentToDetailsMvvmFragment(navigationEvent.cityActivityDto)
+                findNavController().navigate(direction)
+            }
+            else -> {
+                // nothing to do
+            }
+        }
+    }
+
     class ErrorDialogFragment(
         val title: String,
         val message: String,
@@ -196,7 +211,5 @@ class MapMvvmFragment : BaseMvvmFragment(), OnMapReadyCallback {
         private const val CUSTOM_MARKER_ICON = "custom_marker.png"
         private const val MAP_ANIMATE_APPROXIMATION_VALUE = 17f
         private const val ERROR_DIALOG_FRAGMENT_TAG = "error_dialog_fragment_tag"
-
-        fun newInstance() = MapMvvmFragment()
     }
 }

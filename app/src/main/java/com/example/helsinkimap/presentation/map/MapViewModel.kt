@@ -3,21 +3,20 @@ package com.example.helsinkimap.presentation.map
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.helsinkimap.domain.navigation.MainRouter
 import com.example.helsinkimap.presentation.arch.viewmodel.MvvmViewModel
 import com.example.helsinkimap.presentation.arch.viewmodel.SingleLiveData
 import com.example.helsinkimap.specs.api.exceptions.LocationDenyPermissionException
 import com.example.helsinkimap.specs.api.interactors.MapInteractorApi
 import com.example.helsinkimap.specs.entity.ActivityDto
 import com.example.helsinkimap.specs.entity.ErrorTypes
+import com.example.helsinkimap.specs.entity.NavigationEvent
 import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class MapViewModel @Inject constructor(
-    private val mapInteractorApi: MapInteractorApi,
-    private val mainRouter: MainRouter
+    private val mapInteractorApi: MapInteractorApi
 ) : MvvmViewModel() {
 
     private var cityActivitiesDtoList: List<ActivityDto> = listOf()
@@ -27,6 +26,7 @@ class MapViewModel @Inject constructor(
     val poiListEvent: LiveData<List<ActivityDto>> by lazy { SingleLiveData() }
     val detailsButtonVisibilityEvent: LiveData<Boolean> by lazy { MutableLiveData() }
     val errorEvent: LiveData<ErrorTypes> by lazy { SingleLiveData() }
+    val navigationEvent: LiveData<NavigationEvent> by lazy { SingleLiveData() }
 
     init {
         observeLocationFlowable()
@@ -118,7 +118,7 @@ class MapViewModel @Inject constructor(
 
     fun openDetailsScreen() {
         selectedCityActivity?.let { selectedCityActivityNotNull ->
-            mainRouter.openDetailsScreen(selectedCityActivityNotNull)
+            navigationEvent.postValue(NavigationEvent.OpenDetailsScreen(selectedCityActivityNotNull))
         }
     }
 

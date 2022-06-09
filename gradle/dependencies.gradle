@@ -3,7 +3,8 @@ ext.versions = [
         kotlin: '1.6.0',
         verGradle: '7.0.3',
         googleServices: '4.3.4',
-        hilt: '2.40.5'
+        hilt: '2.40.5',
+        navVersion: '2.4.2'
 ]
 
 ext.lib = [
@@ -56,7 +57,8 @@ ext.lib = [
         rxRelay                 : "com.jakewharton.rxrelay2:rxrelay:2.1.1",
 
         /* Screen Navigation */
-        cicerone                 : "ru.terrakok.cicerone:cicerone:5.1.0",
+        navigationFragment      : "androidx.navigation:navigation-fragment-ktx:2.4.2",
+        navigationUI            : "androidx.navigation:navigation-ui-ktx:2.4.2",
 
         /* Test */
         junit                   : "junit:junit:4.12",

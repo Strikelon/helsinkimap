@@ -3,12 +3,12 @@ package com.example.helsinkimap.presentation.details
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.helsinkimap.core.ext.setVisible
 import com.example.helsinkimap.core.ext.toHtml
 import com.example.helsinkimap.databinding.FragmentDetailsBinding
 import com.example.helsinkimap.presentation.arch.BaseMvvmFragment
-import com.example.helsinkimap.presentation.arch.delegate.FragmentArgumentDelegate
 import com.example.helsinkimap.specs.entity.ActivityDto
 import com.example.helsinkimap.specs.entity.ActivityImageLinkDto
 import dagger.hilt.android.AndroidEntryPoint
@@ -18,11 +18,6 @@ class DetailsMvvmFragment : BaseMvvmFragment() {
 
     override val viewModel: DetailsViewModel by viewModels()
     private val binding by viewBinding(FragmentDetailsBinding::inflate)
-
-    private var cityActivityDto: ActivityDto? by FragmentArgumentDelegate(
-        ARGUMENT_SELECTED_CITY_ACTIVITY
-    )
-
     private val poiDetailsRecyclerViewAdapter: PoiDetailsRecyclerViewAdapter by lazy {
         PoiDetailsRecyclerViewAdapter(
             requireContext()
@@ -68,16 +63,5 @@ class DetailsMvvmFragment : BaseMvvmFragment() {
                 poiDetailsRecyclerViewAdapter.setData(imageUrlList)
             }
         }
-    }
-
-    companion object {
-        const val ARGUMENT_SELECTED_CITY_ACTIVITY = "argument_selected_city_activity"
-
-        fun newInstance(
-            cityActivityDto: ActivityDto
-        ): DetailsMvvmFragment =
-            DetailsMvvmFragment().apply {
-                this.cityActivityDto = cityActivityDto
-            }
     }
 }

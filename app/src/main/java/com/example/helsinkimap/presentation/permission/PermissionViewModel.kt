@@ -2,16 +2,14 @@ package com.example.helsinkimap.presentation.permission
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.helsinkimap.domain.navigation.MainRouter
 import com.example.helsinkimap.presentation.arch.viewmodel.MvvmViewModel
 import com.example.helsinkimap.presentation.arch.viewmodel.SingleLiveData
+import com.example.helsinkimap.specs.entity.NavigationEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class PermissionViewModel @Inject constructor(
-    private val mainRouter: MainRouter
-) : MvvmViewModel() {
+class PermissionViewModel @Inject constructor() : MvvmViewModel() {
 
     private var permissionsGranted = false
     private var proceed = false
@@ -21,6 +19,7 @@ class PermissionViewModel @Inject constructor(
     val requestForegroundPermissionsEvent: LiveData<Unit> by lazy { SingleLiveData() }
     val buttonsEnabledState: LiveData<Boolean> by lazy { MutableLiveData() }
     val checkPermissionsEvent: LiveData<Unit> by lazy { SingleLiveData() }
+    val navigationEvent: LiveData<NavigationEvent> by lazy { SingleLiveData() }
 
     init {
         proceedIfPossible()
@@ -41,7 +40,7 @@ class PermissionViewModel @Inject constructor(
     }
 
     private fun openMapScreen() {
-        mainRouter.openMapScreen()
+        navigationEvent.postValue(NavigationEvent.OpenMapScreen)
     }
 
     fun requestAcceptPermissions() {
@@ -65,10 +64,10 @@ class PermissionViewModel @Inject constructor(
     }
 
     fun permissionSettingsClick() {
-        mainRouter.openAppSystemSettingsScreen()
+        navigationEvent.postValue(NavigationEvent.OpenAppSystemSettingsScreen)
     }
 
     fun exit() {
-        mainRouter.exit()
+        navigationEvent.postValue(NavigationEvent.Exit)
     }
 }
