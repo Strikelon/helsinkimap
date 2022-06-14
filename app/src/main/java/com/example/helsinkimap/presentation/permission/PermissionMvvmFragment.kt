@@ -11,6 +11,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.helsinkimap.R
 import com.example.helsinkimap.core.ext.setVisible
@@ -19,7 +22,9 @@ import com.example.helsinkimap.core.navigation.openApplicationDetailsSettings
 import com.example.helsinkimap.databinding.FragmentPermissionsBinding
 import com.example.helsinkimap.presentation.arch.BaseMvvmFragment
 import com.example.helsinkimap.specs.entity.NavigationEvent
+import com.example.helsinkimap.specs.uistate.PermissionUIState
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class PermissionMvvmFragment : BaseMvvmFragment() {
@@ -54,17 +59,26 @@ class PermissionMvvmFragment : BaseMvvmFragment() {
                 viewModel.requestAcceptPermissions()
             }
         }
-    }
-
-    override fun observeLiveData() {
-        with(viewModel) {
-            loadingProgressState.observe(viewLifecycleOwner) { showProgress(it) }
-            viewGroupVisibilityState.observe(viewLifecycleOwner) { setViewGroupVisibility(it) }
-            needPermissionDialogEvent.observe(viewLifecycleOwner) { showNeedPermissionDialog() }
-            requestForegroundPermissionsEvent.observe(viewLifecycleOwner) { requestForegroundPermissions() }
-            buttonsEnabledState.observe(viewLifecycleOwner) { setButtonsEnabled(it) }
-            checkPermissionsEvent.observe(viewLifecycleOwner) { checkPermissions() }
-            navigationEvent.observe(viewLifecycleOwner) { handleNavigationEvent(it) }
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { permissionUIState: PermissionUIState ->
+                    showProgress(permissionUIState.isProgress)
+                    setViewGroupVisibility(permissionUIState.viewGroupVisibility)
+                    setButtonsEnabled(permissionUIState.buttonsEnable)
+                    if (permissionUIState.needPermissionDialog) {
+                        showNeedPermissionDialog()
+                    }
+                    if (permissionUIState.checkPermissions) {
+                        checkPermissions()
+                    }
+                    if (permissionUIState.requestForegroundPermission) {
+                        requestForegroundPermissions()
+                    }
+                    permissionUIState.navigation?.let { navigationEvent: NavigationEvent ->
+                        handleNavigationEvent(navigationEvent)
+                    }
+                }
+            }
         }
     }
 
@@ -139,6 +153,7 @@ class PermissionMvvmFragment : BaseMvvmFragment() {
                 viewModel.permissionSettingsClick()
             }
         ).show(childFragmentManager, PERMISSION_DIALOG_FRAGMENT_TAG)
+        viewModel.needPermissionDialogShown()
     }
 
     private fun handleNavigationEvent(navigationEvent: NavigationEvent) {
@@ -148,6 +163,7 @@ class PermissionMvvmFragment : BaseMvvmFragment() {
                 findNavController().navigate(direction)
             }
             is NavigationEvent.OpenAppSystemSettingsScreen -> {
+                viewModel.navigationEventHandled()
                 openApplicationDetailsSettings()
             }
             is NavigationEvent.Exit -> {

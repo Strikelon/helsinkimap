@@ -1,11 +1,13 @@
 package com.example.helsinkimap.presentation.details
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import com.example.helsinkimap.presentation.arch.viewmodel.MvvmViewModel
-import com.example.helsinkimap.presentation.arch.viewmodel.SingleLiveData
 import com.example.helsinkimap.specs.entity.ActivityDto
+import com.example.helsinkimap.specs.uistate.DetailsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
@@ -18,11 +20,17 @@ class DetailsViewModel @Inject constructor(
             ARGUMENT_SELECTED_CITY_ACTIVITY
         )
     }
-    val poiEvent: LiveData<ActivityDto> by lazy { SingleLiveData() }
+
+    private val _uiState = MutableStateFlow(DetailsUiState())
+    val uiState: StateFlow<DetailsUiState> = _uiState
 
     init {
-        cityActivityDto?.let {
-            poiEvent.postValue(it)
+        cityActivityDto?.let { cityActivityDtoNotNull: ActivityDto ->
+            _uiState.update { currentUiState ->
+                currentUiState.copy(cityActivityDto = cityActivityDtoNotNull)
+            }
+        } ?: _uiState.update { currentUiState ->
+            currentUiState.copy(error = true)
         }
     }
 

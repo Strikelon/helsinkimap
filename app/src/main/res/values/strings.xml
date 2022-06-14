@@ -15,4 +15,5 @@
     <string name="app_needs_permission">App needs precise location permission</string>
     <string name="gps_disabled">GPS is disabled. Please enable gps</string>
     <string name="ok">OK</string>
+    <string name="details_screen_error">Error while opening Details Screen</string>
 </resources>

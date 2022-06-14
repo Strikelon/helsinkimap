@@ -70,7 +70,6 @@ abstract class BaseMvvmFragment() : Fragment(), HasDefaultViewModelProviderFacto
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observeLiveData()
         lifecycleDelegates.forEach { it.onCreateView(view) }
     }
 
@@ -114,6 +113,4 @@ abstract class BaseMvvmFragment() : Fragment(), HasDefaultViewModelProviderFacto
         super.onSaveInstanceState(outState)
         lifecycleDelegates.asReversed().forEach { it.onSaveInstanceState(outState) }
     }
-
-    protected open fun observeLiveData() {}
 }

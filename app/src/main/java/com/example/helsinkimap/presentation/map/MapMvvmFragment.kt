@@ -6,6 +6,9 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.helsinkimap.R
 import com.example.helsinkimap.core.ext.setVisible
@@ -14,6 +17,7 @@ import com.example.helsinkimap.presentation.arch.BaseMvvmFragment
 import com.example.helsinkimap.specs.entity.ActivityDto
 import com.example.helsinkimap.specs.entity.ErrorTypes
 import com.example.helsinkimap.specs.entity.NavigationEvent
+import com.example.helsinkimap.specs.uistate.MapUIState
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -23,6 +27,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MapMvvmFragment : BaseMvvmFragment(), OnMapReadyCallback {
@@ -42,19 +47,22 @@ class MapMvvmFragment : BaseMvvmFragment(), OnMapReadyCallback {
                 viewModel.openDetailsScreen()
             }
         }
-    }
-
-    override fun observeLiveData() {
-        with(viewModel) {
-            currentUserPositionEvent.observe(viewLifecycleOwner) { handleCurrentUserPosition(it) }
-            poiListEvent.observe(viewLifecycleOwner) { handlePoiListLiveData(it) }
-            detailsButtonVisibilityEvent.observe(viewLifecycleOwner) {
-                handleDetailsButtonVisibility(
-                    it
-                )
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { mapUIState: MapUIState ->
+                    mapUIState.currentUserPosition?.let { currentUserPositionNotNull: LatLng ->
+                        handleCurrentUserPosition(currentUserPositionNotNull)
+                    }
+                    handlePoiListLiveData(mapUIState.poiList)
+                    handleDetailsButtonVisibility(mapUIState.detailsButtonVisibility)
+                    mapUIState.error?.let {
+                        handleErrorEvent(it)
+                    }
+                    mapUIState.navigation?.let {
+                        handleNavigationEvent(it)
+                    }
+                }
             }
-            errorEvent.observe(viewLifecycleOwner) { handleErrorEvent(it) }
-            navigationEvent.observe(viewLifecycleOwner) { handleNavigationEvent(it) }
         }
     }
 
@@ -144,6 +152,7 @@ class MapMvvmFragment : BaseMvvmFragment(), OnMapReadyCallback {
                 // nothing to do
             }
         }
+        viewModel.errorHandled()
     }
 
     private fun showNetworkErrorDialog() {
@@ -181,6 +190,7 @@ class MapMvvmFragment : BaseMvvmFragment(), OnMapReadyCallback {
     private fun handleNavigationEvent(navigationEvent: NavigationEvent) {
         when(navigationEvent) {
             is NavigationEvent.OpenDetailsScreen -> {
+                viewModel.navigationEventHandled()
                 val direction = MapMvvmFragmentDirections.actionMapMvvmFragmentToDetailsMvvmFragment(navigationEvent.cityActivityDto)
                 findNavController().navigate(direction)
             }

@@ -74,8 +74,8 @@ dependencies {
     /* Lifecycle */
     implementation lib.lifecycleViewModel
     implementation lib.lifecycleSavedState
-    implementation lib.lifecycleLiveData
     implementation lib.lifecycleProcess
+    implementation lib.lifecycleKTX
 
     /* Google play services */
     implementation lib.googleMaps
@@ -104,6 +104,9 @@ dependencies {
     implementation lib.rxJava
     implementation lib.rxAndroid
     implementation lib.rxRelay
+
+    /* Coroutines */
+    implementation lib.coroutines
 
     /* Screen Navigation */
     implementation lib.navigationFragment

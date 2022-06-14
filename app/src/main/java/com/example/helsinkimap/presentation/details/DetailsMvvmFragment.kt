@@ -3,15 +3,20 @@ package com.example.helsinkimap.presentation.details
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.navArgs
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.helsinkimap.R
 import com.example.helsinkimap.core.ext.setVisible
 import com.example.helsinkimap.core.ext.toHtml
 import com.example.helsinkimap.databinding.FragmentDetailsBinding
 import com.example.helsinkimap.presentation.arch.BaseMvvmFragment
 import com.example.helsinkimap.specs.entity.ActivityDto
 import com.example.helsinkimap.specs.entity.ActivityImageLinkDto
+import com.example.helsinkimap.specs.uistate.DetailsUiState
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class DetailsMvvmFragment : BaseMvvmFragment() {
@@ -32,12 +37,23 @@ class DetailsMvvmFragment : BaseMvvmFragment() {
                 adapter = poiDetailsRecyclerViewAdapter
             }
         }
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { detailsUIState: DetailsUiState ->
+                    detailsUIState.cityActivityDto?.let {
+                        showPoiDetails(it)
+                        return@collect
+                    }
+                    if (detailsUIState.error) {
+                        showError()
+                    }
+                }
+            }
+        }
     }
 
-    override fun observeLiveData() {
-        with(viewModel) {
-            poiEvent.observe(viewLifecycleOwner) { showPoiDetails(it) }
-        }
+    private fun showError() {
+        binding.poiTitle.text = getString(R.string.details_screen_error)
     }
 
     private fun showPoiDetails(activityDto: ActivityDto) {
