@@ -1,6 +1,11 @@
 package com.example.helsinkimap.data.scheduler
 
-import io.reactivex.*
+import io.reactivex.CompletableTransformer
+import io.reactivex.FlowableTransformer
+import io.reactivex.MaybeTransformer
+import io.reactivex.ObservableTransformer
+import io.reactivex.Scheduler
+import io.reactivex.SingleTransformer
 
 interface SchedulersProvider {
 

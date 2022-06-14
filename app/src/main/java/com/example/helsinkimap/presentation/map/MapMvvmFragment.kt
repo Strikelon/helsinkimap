@@ -188,7 +188,7 @@ class MapMvvmFragment : BaseMvvmFragment(), OnMapReadyCallback {
     }
 
     private fun handleNavigationEvent(navigationEvent: NavigationEvent) {
-        when(navigationEvent) {
+        when (navigationEvent) {
             is NavigationEvent.OpenDetailsScreen -> {
                 viewModel.navigationEventHandled()
                 val direction = MapMvvmFragmentDirections.actionMapMvvmFragmentToDetailsMvvmFragment(navigationEvent.cityActivityDto)

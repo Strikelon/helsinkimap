@@ -18,8 +18,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class AppModule(
-) {
+class AppModule() {
     /**
      * Provides Schedulers for switching threads in interactors
      */

@@ -157,7 +157,7 @@ class PermissionMvvmFragment : BaseMvvmFragment() {
     }
 
     private fun handleNavigationEvent(navigationEvent: NavigationEvent) {
-        when(navigationEvent) {
+        when (navigationEvent) {
             is NavigationEvent.OpenMapScreen -> {
                 val direction = PermissionMvvmFragmentDirections.actionPermissionMvvmFragmentToMapMvvmFragment()
                 findNavController().navigate(direction)
