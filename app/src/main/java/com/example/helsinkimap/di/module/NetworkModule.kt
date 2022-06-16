@@ -11,7 +11,6 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
@@ -57,7 +56,6 @@ class NetworkModule {
         Retrofit.Builder()
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .baseUrl(BuildConfig.API_BASE_URL)
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
 
     @Singleton
     @Provides

@@ -1,19 +1,19 @@
 package com.example.helsinkimap.data.repository
 
-import com.example.helsinkimap.data.location.datasource.LocationDataSource
+import com.example.helsinkimap.data.location.datasource.LocationLocalDataSource
 import com.example.helsinkimap.specs.api.repositories.LocationRepositoryApi
 import com.example.helsinkimap.specs.entity.ErrorTypes
 import com.google.android.gms.maps.model.LatLng
-import io.reactivex.Flowable
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class LocationRepository @Inject constructor(
-    private val locationDataSource: LocationDataSource
+    private val locationLocalDataSource: LocationLocalDataSource
 ) : LocationRepositoryApi {
 
-    override fun observeLocationFlowable(): Flowable<LatLng> =
-        locationDataSource.observeLocationFlowable()
+    override fun observeGpsError(): Flow<ErrorTypes> =
+        locationLocalDataSource.observeGpsError()
 
-    override fun observeGpsErrorFlowable(): Flowable<ErrorTypes> =
-        locationDataSource.observeGpsErrorFlowable()
+    override fun observeLocation(): Flow<LatLng> =
+        locationLocalDataSource.observeLocation()
 }

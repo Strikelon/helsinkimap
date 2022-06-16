@@ -1,9 +1,12 @@
 package com.example.helsinkimap.presentation.map
 
 import android.util.Log
+import androidx.lifecycle.viewModelScope
+import com.example.helsinkimap.domain.usecases.ObserveCityActivitiesUseCase
+import com.example.helsinkimap.domain.usecases.ObserveGpsErrorUseCase
+import com.example.helsinkimap.domain.usecases.ObserveLocationUseCase
 import com.example.helsinkimap.presentation.arch.viewmodel.MvvmViewModel
 import com.example.helsinkimap.specs.api.exceptions.LocationDenyPermissionException
-import com.example.helsinkimap.specs.api.interactors.MapInteractorApi
 import com.example.helsinkimap.specs.entity.ActivityDto
 import com.example.helsinkimap.specs.entity.ErrorTypes
 import com.example.helsinkimap.specs.entity.NavigationEvent
@@ -12,11 +15,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MapViewModel @Inject constructor(
-    private val mapInteractorApi: MapInteractorApi
+    private val observeCityActivitiesUseCase: ObserveCityActivitiesUseCase,
+    private val observeGpsErrorUseCase: ObserveGpsErrorUseCase,
+    private val observeLocationUseCase: ObserveLocationUseCase,
 ) : MvvmViewModel() {
 
     private var cityActivitiesDtoList: List<ActivityDto> = listOf()
@@ -26,101 +32,86 @@ class MapViewModel @Inject constructor(
     val uiState: StateFlow<MapUIState> = _uiState
 
     init {
-        observeLocationFlowable()
-        observeCityActivitiesFlowable()
+        observeLocation()
+        observeCityActivities()
+        observeGpsError()
     }
 
-    override fun attach() {
-        super.attach()
-        observeGpsErrorFlowable()
-    }
-
-    override fun detach() {
-        super.detach()
-        unsubscribeGpsErrorFlowable()
-    }
-
-    private fun observeLocationFlowable() {
-        mapInteractorApi.observeLocationFlowable()
-            .subscribe(
-                {
-                    _uiState.update { currentState: MapUIState ->
-                        currentState.copy(
-                            currentUserPosition = it
-                        )
-                    }
-                },
-                { throwable ->
-                    Log.e("Error", "observeLocationFlowable() error $throwable")
-                    if (throwable is LocationDenyPermissionException) {
+    private fun observeLocation() {
+        viewModelScope.launch {
+            try {
+                observeLocationUseCase()
+                    .collect {
                         _uiState.update { currentState: MapUIState ->
                             currentState.copy(
-                                error = ErrorTypes.PERMISSION_ERROR
-                            )
-                        }
-                    } else {
-                        _uiState.update { currentState: MapUIState ->
-                            currentState.copy(
-                                error = ErrorTypes.GPS_USE_ERROR
+                                currentUserPosition = it
                             )
                         }
                     }
-                }
-            )
-            .unsubscribeOnDestroy()
-    }
-
-    private fun observeCityActivitiesFlowable() {
-        mapInteractorApi.observeCityActivitiesFlowable()
-            .subscribe(
-                {
-                    skipSelectedCityActivity()
-                    cityActivitiesDtoList = it
+            } catch (e: Exception) {
+                Log.e("Error", "observeLocationFlowable() error $e")
+                if (e is LocationDenyPermissionException) {
                     _uiState.update { currentState: MapUIState ->
                         currentState.copy(
-                            poiList = it
+                            error = ErrorTypes.PERMISSION_ERROR
                         )
                     }
-                },
-                {
-                    Log.e("Error", "getActivities() error $it")
+                } else {
                     _uiState.update { currentState: MapUIState ->
                         currentState.copy(
-                            error = ErrorTypes.NETWORK_ERROR
+                            error = ErrorTypes.GPS_USE_ERROR
                         )
                     }
                 }
-            )
-            .unsubscribeOnDestroy()
+            }
+        }
     }
 
-    private fun observeGpsErrorFlowable() {
-        rxHelper.unsubscribeBy(OBSERVE_GPS_ERROR_TAG)
-        rxHelper.add(
-            OBSERVE_GPS_ERROR_TAG,
-            mapInteractorApi.observeGpsErrorFlowable()
-                .subscribe(
-                    {
+    private fun observeCityActivities() {
+        viewModelScope.launch {
+            try {
+                observeCityActivitiesUseCase()
+                    .collect {
+                        skipSelectedCityActivity()
+                        cityActivitiesDtoList = it
+                        _uiState.update { currentState: MapUIState ->
+                            currentState.copy(
+                                poiList = it
+                            )
+                        }
+                    }
+            } catch (e: Exception) {
+                Log.e("Error", "getActivities() error $e")
+                _uiState.update { currentState: MapUIState ->
+                    currentState.copy(
+                        error = ErrorTypes.NETWORK_ERROR
+                    )
+                }
+            }
+        }
+    }
+
+    private fun observeGpsError() {
+        viewModelScope.launch {
+            try {
+                observeGpsErrorUseCase()
+                    .collect {
+                        Log.e("Error", "observeGpsErrorUseCase() $it")
                         _uiState.update { currentState: MapUIState ->
                             currentState.copy(
                                 error = it
                             )
                         }
-                    },
-                    {
-                        Log.e("Error", "observeGpsErrorFlowable() error $it")
-                        _uiState.update { currentState: MapUIState ->
-                            currentState.copy(
-                                error = ErrorTypes.GPS_USE_ERROR
-                            )
-                        }
                     }
-                )
-        )
-    }
-
-    private fun unsubscribeGpsErrorFlowable() {
-        rxHelper.unsubscribeBy(OBSERVE_GPS_ERROR_TAG)
+            } catch (e: Exception) {
+                Log.e("Error", "observeGpsErrorUseCase() error $e")
+                _uiState.update { currentState: MapUIState ->
+                    currentState.copy(
+                        error = ErrorTypes.GPS_USE_ERROR
+                    )
+                }
+            }
+        }
     }
 
     fun selectPoiMarker(id: String?) {
@@ -171,9 +162,5 @@ class MapViewModel @Inject constructor(
                 error = null
             )
         }
-    }
-
-    companion object {
-        private const val OBSERVE_GPS_ERROR_TAG = "observe_gps_error_tag"
     }
 }

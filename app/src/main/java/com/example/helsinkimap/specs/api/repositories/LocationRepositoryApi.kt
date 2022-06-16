@@ -2,11 +2,11 @@ package com.example.helsinkimap.specs.api.repositories
 
 import com.example.helsinkimap.specs.entity.ErrorTypes
 import com.google.android.gms.maps.model.LatLng
-import io.reactivex.Flowable
+import kotlinx.coroutines.flow.Flow
 
 interface LocationRepositoryApi {
 
-    fun observeLocationFlowable(): Flowable<LatLng>
+    fun observeGpsError(): Flow<ErrorTypes>
 
-    fun observeGpsErrorFlowable(): Flowable<ErrorTypes>
+    fun observeLocation(): Flow<LatLng>
 }

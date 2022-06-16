@@ -1,13 +1,13 @@
 package com.example.helsinkimap.di.module
 
-import com.example.helsinkimap.data.location.datasource.LocationDataSource
-import com.example.helsinkimap.data.network.datasource.NetworkApiDatasource
+import com.example.helsinkimap.data.coroutinescope.AppCoroutineScope
+import com.example.helsinkimap.data.coroutinescope.CoroutineScopeProvider
+import com.example.helsinkimap.data.dispatcher.AppDispatchers
+import com.example.helsinkimap.data.dispatcher.DispatchersProvider
+import com.example.helsinkimap.data.location.datasource.LocationLocalDataSource
+import com.example.helsinkimap.data.network.datasource.ActivitiesRemoteDatasource
 import com.example.helsinkimap.data.repository.CityEntertainmentRepository
 import com.example.helsinkimap.data.repository.LocationRepository
-import com.example.helsinkimap.data.scheduler.AppSchedulers
-import com.example.helsinkimap.data.scheduler.SchedulersProvider
-import com.example.helsinkimap.domain.interactor.MapInteractor
-import com.example.helsinkimap.specs.api.interactors.MapInteractorApi
 import com.example.helsinkimap.specs.api.repositories.CityEntertainmentRepositoryApi
 import com.example.helsinkimap.specs.api.repositories.LocationRepositoryApi
 import dagger.Module
@@ -18,45 +18,31 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class AppModule() {
-    /**
-     * Provides Schedulers for switching threads in interactors
-     */
+class AppModule {
+
     @Provides
     @Singleton
-    fun provideSchedulers(): SchedulersProvider = AppSchedulers()
+    fun provideCoroutineScopes(): CoroutineScopeProvider = AppCoroutineScope()
 
-    // Repositories
+    @Provides
+    @Singleton
+    fun provideDispatchers(): DispatchersProvider = AppDispatchers()
 
     @Provides
     @Singleton
     fun provideMapRepository(
-        networkApiDatasource: NetworkApiDatasource
+        activitiesRemoteDatasource: ActivitiesRemoteDatasource
     ): CityEntertainmentRepositoryApi =
         CityEntertainmentRepository(
-            networkApiDatasource
+            activitiesRemoteDatasource
         )
 
     @Provides
     @Singleton
     fun provideLocationRepository(
-        locationDataSource: LocationDataSource
+        locationLocalDataSource: LocationLocalDataSource
     ): LocationRepositoryApi =
         LocationRepository(
-            locationDataSource
-        )
-
-    // Interactors
-
-    @Provides
-    fun provideMapInteractor(
-        cityEntertainmentRepository: CityEntertainmentRepositoryApi,
-        locationRepository: LocationRepositoryApi,
-        schedulers: SchedulersProvider
-    ): MapInteractorApi =
-        MapInteractor(
-            cityEntertainmentRepository,
-            locationRepository,
-            schedulers
+            locationLocalDataSource
         )
 }

@@ -7,7 +7,7 @@ import android.location.Location
 import android.location.LocationManager
 import android.os.Looper
 import androidx.core.app.ActivityCompat
-import com.example.helsinkimap.core.rx.RxHelperUpdated
+import com.example.helsinkimap.data.coroutinescope.CoroutineScopeProvider
 import com.example.helsinkimap.specs.api.exceptions.LocationDenyPermissionException
 import com.example.helsinkimap.specs.entity.ErrorTypes
 import com.google.android.gms.location.LocationCallback
@@ -15,52 +15,60 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
-import com.jakewharton.rxrelay2.PublishRelay
 import dagger.hilt.android.qualifiers.ApplicationContext
-import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
-import io.reactivex.Observable
-import java.util.concurrent.TimeUnit
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class LocationDataSource @Inject constructor(
+class LocationLocalDataSource @Inject constructor(
     @ApplicationContext
-    private val context: Context
+    private val context: Context,
+    coroutineScopeProvider: CoroutineScopeProvider
 ) {
-    private val gpsErrorRelay: PublishRelay<ErrorTypes> = PublishRelay.create()
     private val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
     private val locationRequest = LocationRequest.create()?.apply {
         interval = INTERVAL
         fastestInterval = FASTEST_INTERVAL
         priority = LocationRequest.PRIORITY_HIGH_ACCURACY
     }
-    private val rxHelperUpdated: RxHelperUpdated = RxHelperUpdated()
     private val mLocationManager =
         context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
+    private val gpsErrorSharedFlow = MutableSharedFlow<ErrorTypes>(
+        replay = 1,
+        onBufferOverflow = BufferOverflow.DROP_LATEST
+    )
+
     init {
-        rxHelperUpdated.add(
-            Observable.interval(CHECK_ERRORS_INTERVAL, TimeUnit.MILLISECONDS)
-                .subscribe {
-                    if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                        gpsErrorRelay.accept(ErrorTypes.GPS_ENABLE_ERROR)
-                    } else {
-                        gpsErrorRelay.accept(ErrorTypes.NONE)
-                    }
+        coroutineScopeProvider.coroutineScope().launch {
+            while (isActive) {
+                delay(CHECK_ERRORS_INTERVAL)
+                if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                    gpsErrorSharedFlow.emit(ErrorTypes.GPS_ENABLE_ERROR)
+                } else {
+                    gpsErrorSharedFlow.emit(ErrorTypes.NONE)
                 }
-        )
+            }
+        }
     }
 
-    fun observeLocationFlowable(): Flowable<LatLng> =
-        Flowable.create<LatLng>({ emitter ->
+    fun observeLocation(): Flow<LatLng> =
+        callbackFlow {
             val locationCallback = object : LocationCallback() {
                 override fun onLocationResult(locationResult: LocationResult?) {
                     locationResult ?: return
                     for (location in locationResult.locations) {
                         location?.let {
-                            emitter.onNext(mapLocationToLocationData(location))
+                            trySend(mapLocationToLocationData(location))
                         }
                     }
                 }
@@ -73,23 +81,18 @@ class LocationDataSource @Inject constructor(
                         Manifest.permission.ACCESS_COARSE_LOCATION
                     ) != PackageManager.PERMISSION_GRANTED
             ) {
-                emitter.onError(LocationDenyPermissionException(ACCESS_FINE_LOCATION_DENIED))
+                throw LocationDenyPermissionException(ACCESS_FINE_LOCATION_DENIED)
             }
             fusedLocationClient?.requestLocationUpdates(
                 locationRequest,
                 locationCallback,
                 Looper.getMainLooper()
             )
-            emitter.setCancellable {
-                fusedLocationClient?.removeLocationUpdates(locationCallback)
-            }
-        }, BackpressureStrategy.BUFFER)
-            .replay(1).refCount()
+            awaitClose { fusedLocationClient?.removeLocationUpdates(locationCallback) }
+        }
 
-    fun observeGpsErrorFlowable(): Flowable<ErrorTypes> =
-        gpsErrorRelay.toFlowable(
-            BackpressureStrategy.LATEST
-        ).publish().refCount()
+    fun observeGpsError(): Flow<ErrorTypes> =
+        gpsErrorSharedFlow.asSharedFlow()
 
     private fun mapLocationToLocationData(location: Location) =
         LatLng(
