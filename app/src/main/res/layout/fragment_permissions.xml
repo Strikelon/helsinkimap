@@ -10,8 +10,8 @@
         android:id="@+id/permissionViewGroup"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:constraint_referenced_ids="permissionTitleTV, permissionPreviewTV, refuseButton, acceptButton"
-        android:visibility="gone" />
+        android:visibility="gone"
+        app:constraint_referenced_ids="permissionTitleTV, permissionPreviewTV, acceptButton" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideTopPermission"
@@ -51,25 +51,6 @@
         app:layout_constraintTop_toBottomOf="@+id/permissionTitleTV" />
 
     <Button
-        android:id="@+id/refuseButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/permission_button_margin"
-        android:layout_marginStart="@dimen/permission_button_margin"
-        android:layout_marginTop="@dimen/permission_button_top_bottom_margin"
-        android:layout_marginBottom="@dimen/permission_button_top_bottom_margin"
-        android:text="@string/permission_button_refuse"
-        android:background="@drawable/border_blue_round_selector"
-        android:textAllCaps="false"
-        android:textColor="@drawable/border_blue_button_selector"
-        android:textSize="@dimen/permission_button_text_size"
-        android:textStyle="bold"
-        android:stateListAnimator="@null"
-        app:layout_constraintEnd_toStartOf="@+id/acceptButton"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
         android:id="@+id/acceptButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -84,7 +65,7 @@
         android:textSize="@dimen/permission_button_text_size"
         android:textStyle="bold"
         android:stateListAnimator="@null"
-        app:layout_constraintStart_toEndOf="@+id/refuseButton"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

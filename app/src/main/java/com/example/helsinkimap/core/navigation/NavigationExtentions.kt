@@ -5,10 +5,6 @@ import android.net.Uri
 import android.provider.Settings
 import androidx.fragment.app.Fragment
 
-fun Fragment.exitApp() {
-    requireActivity().finish()
-}
-
 fun Fragment.openApplicationDetailsSettings() {
     startActivity(
         Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {

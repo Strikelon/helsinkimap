@@ -17,7 +17,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.helsinkimap.R
-import com.example.helsinkimap.core.navigation.exitApp
 import com.example.helsinkimap.core.navigation.openApplicationDetailsSettings
 import com.example.helsinkimap.databinding.FragmentPermissionsBinding
 import com.example.helsinkimap.presentation.arch.BaseMvvmFragment
@@ -52,9 +51,6 @@ class PermissionMvvmFragment : BaseMvvmFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         with(binding) {
-            refuseButton.setOnClickListener {
-                viewModel.exit()
-            }
             acceptButton.setOnClickListener {
                 viewModel.requestAcceptPermissions()
             }
@@ -103,7 +99,6 @@ class PermissionMvvmFragment : BaseMvvmFragment() {
 
     private fun setButtonsEnabled(enabled: Boolean) {
         with(binding) {
-            refuseButton.isEnabled = enabled
             acceptButton.isEnabled = enabled
         }
     }
@@ -165,9 +160,6 @@ class PermissionMvvmFragment : BaseMvvmFragment() {
             is NavigationEvent.OpenAppSystemSettingsScreen -> {
                 viewModel.navigationEventHandled()
                 openApplicationDetailsSettings()
-            }
-            is NavigationEvent.Exit -> {
-                exitApp()
             }
             else -> {
                 // nothing to do

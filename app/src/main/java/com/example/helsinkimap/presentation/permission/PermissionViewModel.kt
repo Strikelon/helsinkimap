@@ -98,14 +98,6 @@ class PermissionViewModel @Inject constructor() : MvvmViewModel() {
         }
     }
 
-    fun exit() {
-        _uiState.update { currentState: PermissionUIState ->
-            currentState.copy(
-                navigation = NavigationEvent.Exit
-            )
-        }
-    }
-
     fun needPermissionDialogShown() {
         _uiState.update { currentState: PermissionUIState ->
             currentState.copy(
