@@ -3,7 +3,6 @@ package com.example.helsinkimap.data.location.datasource
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
-import android.location.Location
 import android.location.LocationManager
 import android.os.Looper
 import androidx.core.app.ActivityCompat
@@ -45,7 +44,12 @@ class LocationLocalDataSource @Inject constructor(
                     locationResult ?: return
                     for (location in locationResult.locations) {
                         location?.let {
-                            trySend(mapLocationToLocationData(location))
+                            trySend(
+                                LatLng(
+                                    location.latitude,
+                                    location.longitude
+                                )
+                            )
                         }
                     }
                 }
@@ -80,12 +84,6 @@ class LocationLocalDataSource @Inject constructor(
         }
     }
         .distinctUntilChanged()
-
-    private fun mapLocationToLocationData(location: Location) =
-        LatLng(
-            location.latitude,
-            location.longitude
-        )
 
     companion object {
         private const val INTERVAL = 10000L
