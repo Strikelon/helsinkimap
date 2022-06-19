@@ -48,7 +48,7 @@ class MapMvvmFragment : BaseMvvmFragment(), OnMapReadyCallback {
             }
         }
         viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { mapUIState: MapUIState ->
                     mapUIState.currentUserPosition?.let { currentUserPositionNotNull: LatLng ->
                         handleCurrentUserPosition(currentUserPositionNotNull)

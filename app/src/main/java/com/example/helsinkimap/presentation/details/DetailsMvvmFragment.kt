@@ -38,7 +38,7 @@ class DetailsMvvmFragment : BaseMvvmFragment() {
             }
         }
         viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { detailsUIState: DetailsUiState ->
                     detailsUIState.cityActivityDto?.let {
                         showPoiDetails(it)

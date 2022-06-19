@@ -60,7 +60,7 @@ class PermissionMvvmFragment : BaseMvvmFragment() {
             }
         }
         viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { permissionUIState: PermissionUIState ->
                     showProgress(permissionUIState.isProgress)
                     setViewGroupVisibility(permissionUIState.viewGroupVisibility)
