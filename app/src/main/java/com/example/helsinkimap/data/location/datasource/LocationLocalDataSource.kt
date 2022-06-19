@@ -7,7 +7,6 @@ import android.location.Location
 import android.location.LocationManager
 import android.os.Looper
 import androidx.core.app.ActivityCompat
-import com.example.helsinkimap.data.coroutinescope.CoroutineScopeProvider
 import com.example.helsinkimap.specs.api.exceptions.LocationDenyPermissionException
 import com.example.helsinkimap.specs.entity.ErrorTypes
 import com.google.android.gms.location.LocationCallback
@@ -16,15 +15,12 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -32,7 +28,6 @@ import javax.inject.Singleton
 class LocationLocalDataSource @Inject constructor(
     @ApplicationContext
     private val context: Context,
-    coroutineScopeProvider: CoroutineScopeProvider
 ) {
     private val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
     private val locationRequest = LocationRequest.create()?.apply {
@@ -42,24 +37,6 @@ class LocationLocalDataSource @Inject constructor(
     }
     private val mLocationManager =
         context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
-    private val gpsErrorSharedFlow = MutableSharedFlow<ErrorTypes>(
-        replay = 1,
-        onBufferOverflow = BufferOverflow.DROP_LATEST
-    )
-
-    init {
-        coroutineScopeProvider.coroutineScope().launch {
-            while (isActive) {
-                delay(CHECK_ERRORS_INTERVAL)
-                if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                    gpsErrorSharedFlow.emit(ErrorTypes.GPS_ENABLE_ERROR)
-                } else {
-                    gpsErrorSharedFlow.emit(ErrorTypes.NONE)
-                }
-            }
-        }
-    }
 
     fun observeLocation(): Flow<LatLng> =
         callbackFlow {
@@ -90,9 +67,19 @@ class LocationLocalDataSource @Inject constructor(
             )
             awaitClose { fusedLocationClient?.removeLocationUpdates(locationCallback) }
         }
+            .distinctUntilChanged()
 
-    fun observeGpsError(): Flow<ErrorTypes> =
-        gpsErrorSharedFlow.asSharedFlow()
+    fun observeGpsError(): Flow<ErrorTypes> = flow {
+        while (true) {
+            delay(CHECK_ERRORS_INTERVAL)
+            if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                emit(ErrorTypes.GPS_ENABLE_ERROR)
+            } else {
+                emit(ErrorTypes.NONE)
+            }
+        }
+    }
+        .distinctUntilChanged()
 
     private fun mapLocationToLocationData(location: Location) =
         LatLng(

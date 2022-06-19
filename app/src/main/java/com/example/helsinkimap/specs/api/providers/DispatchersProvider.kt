@@ -1,4 +1,4 @@
-package com.example.helsinkimap.data.dispatcher
+package com.example.helsinkimap.specs.api.providers
 
 import kotlinx.coroutines.CoroutineDispatcher
 

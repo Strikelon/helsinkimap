@@ -1,5 +1,6 @@
 package com.example.helsinkimap.data.dispatcher
 
+import com.example.helsinkimap.specs.api.providers.DispatchersProvider
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject
