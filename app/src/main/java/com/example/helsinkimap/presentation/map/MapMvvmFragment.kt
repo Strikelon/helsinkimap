@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -11,7 +12,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.helsinkimap.R
-import com.example.helsinkimap.core.ext.setVisible
 import com.example.helsinkimap.databinding.FragmentMapBinding
 import com.example.helsinkimap.presentation.arch.BaseMvvmFragment
 import com.example.helsinkimap.specs.entity.ActivityDto
@@ -131,7 +131,7 @@ class MapMvvmFragment : BaseMvvmFragment(), OnMapReadyCallback {
     }
 
     private fun handleDetailsButtonVisibility(isVisible: Boolean) {
-        binding.detailsButton.setVisible(isVisible)
+        binding.detailsButton.isVisible = isVisible
     }
 
     private fun handleErrorEvent(errorTypes: ErrorTypes) {

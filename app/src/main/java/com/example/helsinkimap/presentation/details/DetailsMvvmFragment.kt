@@ -2,14 +2,14 @@ package com.example.helsinkimap.presentation.details
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.helsinkimap.R
-import com.example.helsinkimap.core.ext.setVisible
-import com.example.helsinkimap.core.ext.toHtml
+import com.example.helsinkimap.core.ext.fromHtml
 import com.example.helsinkimap.databinding.FragmentDetailsBinding
 import com.example.helsinkimap.presentation.arch.BaseMvvmFragment
 import com.example.helsinkimap.specs.entity.ActivityDto
@@ -65,7 +65,7 @@ class DetailsMvvmFragment : BaseMvvmFragment() {
             val address = "$locality, $postalCode, $streetAddress"
             poiAddress.text = address
             poiLink.text = activityDto.infoUrl
-            poiDescription.text = activityDto.description.toHtml()
+            poiDescription.text = activityDto.description.fromHtml()
             showImages(activityDto.imageLinkList)
         }
     }
@@ -73,9 +73,9 @@ class DetailsMvvmFragment : BaseMvvmFragment() {
     private fun showImages(imageUrlList: List<ActivityImageLinkDto>) {
         with(binding) {
             if (imageUrlList.isEmpty()) {
-                poiDetailsRecyclerView.setVisible(false)
+                poiDetailsRecyclerView.isVisible = false
             } else {
-                poiDetailsRecyclerView.setVisible(true)
+                poiDetailsRecyclerView.isVisible = true
                 poiDetailsRecyclerViewAdapter.setData(imageUrlList)
             }
         }

@@ -9,6 +9,7 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -16,7 +17,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.helsinkimap.R
-import com.example.helsinkimap.core.ext.setVisible
 import com.example.helsinkimap.core.navigation.exitApp
 import com.example.helsinkimap.core.navigation.openApplicationDetailsSettings
 import com.example.helsinkimap.databinding.FragmentPermissionsBinding
@@ -92,13 +92,13 @@ class PermissionMvvmFragment : BaseMvvmFragment() {
 
     private fun showProgress(inProgress: Boolean) {
         with(binding) {
-            loginProgressMask.setVisible(inProgress)
-            loginProgressBar.setVisible(inProgress)
+            loginProgressMask.isVisible = inProgress
+            loginProgressBar.isVisible = inProgress
         }
     }
 
     private fun setViewGroupVisibility(visible: Boolean) {
-        binding.permissionViewGroup.setVisible(visible)
+        binding.permissionViewGroup.isVisible = visible
     }
 
     private fun setButtonsEnabled(enabled: Boolean) {
