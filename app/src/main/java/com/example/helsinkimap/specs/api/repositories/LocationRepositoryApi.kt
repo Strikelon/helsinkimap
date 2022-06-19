@@ -9,4 +9,8 @@ interface LocationRepositoryApi {
     fun observeGpsError(): Flow<ErrorTypes>
 
     fun observeLocation(): Flow<LatLng>
+
+    fun saveTempLocation(latLng: LatLng)
+
+    fun getTempLocation(): LatLng?
 }

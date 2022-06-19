@@ -16,4 +16,11 @@ class LocationRepository @Inject constructor(
 
     override fun observeLocation(): Flow<LatLng> =
         locationLocalDataSource.observeLocation()
+
+    override fun saveTempLocation(latLng: LatLng) {
+        locationLocalDataSource.saveTempLocation(latLng)
+    }
+
+    override fun getTempLocation(): LatLng? =
+        locationLocalDataSource.getTempLocation()
 }
