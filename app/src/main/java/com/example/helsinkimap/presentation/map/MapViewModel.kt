@@ -14,6 +14,7 @@ import com.example.helsinkimap.specs.uistate.MapUIState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -39,78 +40,75 @@ class MapViewModel @Inject constructor(
 
     private fun observeLocation() {
         viewModelScope.launch {
-            try {
-                observeLocationUseCase()
-                    .collect {
+            observeLocationUseCase()
+                .catch {
+                    Log.e("Error", "observeLocationFlowable() error $it")
+                    if (it is LocationDenyPermissionException) {
                         _uiState.update { currentState: MapUIState ->
                             currentState.copy(
-                                currentUserPosition = it
+                                error = ErrorTypes.PERMISSION_ERROR
+                            )
+                        }
+                    } else {
+                        _uiState.update { currentState: MapUIState ->
+                            currentState.copy(
+                                error = ErrorTypes.GPS_USE_ERROR
                             )
                         }
                     }
-            } catch (e: Exception) {
-                Log.e("Error", "observeLocationFlowable() error $e")
-                if (e is LocationDenyPermissionException) {
+                }
+                .collect {
                     _uiState.update { currentState: MapUIState ->
                         currentState.copy(
-                            error = ErrorTypes.PERMISSION_ERROR
+                            currentUserPosition = it
                         )
                     }
-                } else {
+                }
+        }
+    }
+
+    private fun observeCityActivities() {
+        viewModelScope.launch {
+            observeCityActivitiesUseCase()
+                .catch {
+                    Log.e("Error", "getActivities() error $it")
+                    _uiState.update { currentState: MapUIState ->
+                        currentState.copy(
+                            error = ErrorTypes.NETWORK_ERROR
+                        )
+                    }
+                }
+                .collect {
+                    skipSelectedCityActivity()
+                    cityActivitiesDtoList = it
+                    _uiState.update { currentState: MapUIState ->
+                        currentState.copy(
+                            poiList = it
+                        )
+                    }
+                }
+        }
+    }
+
+    private fun observeGpsError() {
+        viewModelScope.launch {
+            observeGpsErrorUseCase()
+                .catch {
+                    Log.e("Error", "observeGpsErrorUseCase() error $it")
                     _uiState.update { currentState: MapUIState ->
                         currentState.copy(
                             error = ErrorTypes.GPS_USE_ERROR
                         )
                     }
                 }
-            }
-        }
-    }
-
-    private fun observeCityActivities() {
-        viewModelScope.launch {
-            try {
-                observeCityActivitiesUseCase()
-                    .collect {
-                        skipSelectedCityActivity()
-                        cityActivitiesDtoList = it
-                        _uiState.update { currentState: MapUIState ->
-                            currentState.copy(
-                                poiList = it
-                            )
-                        }
+                .collect {
+                    Log.e("Error", "observeGpsErrorUseCase() $it")
+                    _uiState.update { currentState: MapUIState ->
+                        currentState.copy(
+                            error = it
+                        )
                     }
-            } catch (e: Exception) {
-                Log.e("Error", "getActivities() error $e")
-                _uiState.update { currentState: MapUIState ->
-                    currentState.copy(
-                        error = ErrorTypes.NETWORK_ERROR
-                    )
                 }
-            }
-        }
-    }
-
-    private fun observeGpsError() {
-        viewModelScope.launch {
-            try {
-                observeGpsErrorUseCase()
-                    .collect {
-                        Log.e("Error", "observeGpsErrorUseCase() $it")
-                        _uiState.update { currentState: MapUIState ->
-                            currentState.copy(
-                                error = it
-                            )
-                        }
-                    }
-            } catch (e: Exception) {
-                Log.e("Error", "observeGpsErrorUseCase() error $e")
-                _uiState.update { currentState: MapUIState ->
-                    currentState.copy(
-                        error = ErrorTypes.GPS_USE_ERROR
-                    )
-                }
-            }
         }
     }
 
