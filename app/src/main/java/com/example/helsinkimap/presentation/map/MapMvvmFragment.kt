@@ -152,10 +152,10 @@ class MapMvvmFragment : BaseMvvmFragment(), OnMapReadyCallback {
                 // nothing to do
             }
         }
-        viewModel.errorHandled()
     }
 
     private fun showNetworkErrorDialog() {
+        viewModel.errorHandled()
         ErrorDialogFragment(
             title = getString(R.string.error),
             message = getString(R.string.network_error),
@@ -164,6 +164,7 @@ class MapMvvmFragment : BaseMvvmFragment(), OnMapReadyCallback {
     }
 
     private fun showGpsUseErrorDialog() {
+        viewModel.errorHandled()
         ErrorDialogFragment(
             title = getString(R.string.error),
             message = getString(R.string.gps_use_error),
@@ -172,6 +173,7 @@ class MapMvvmFragment : BaseMvvmFragment(), OnMapReadyCallback {
     }
 
     private fun showPermissionErrorDialog() {
+        viewModel.errorHandled()
         ErrorDialogFragment(
             title = getString(R.string.error),
             message = getString(R.string.app_needs_permission),
@@ -180,6 +182,7 @@ class MapMvvmFragment : BaseMvvmFragment(), OnMapReadyCallback {
     }
 
     private fun showGpsEnableErrorDialog() {
+        viewModel.errorHandled()
         ErrorDialogFragment(
             title = getString(R.string.error),
             message = getString(R.string.gps_disabled),

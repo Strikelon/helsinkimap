@@ -3,6 +3,7 @@ package com.example.helsinkimap.domain.usecases
 import com.example.helsinkimap.core.mathext.calculateDistanceInKilometer
 import com.example.helsinkimap.specs.api.repositories.CityEntertainmentRepositoryApi
 import com.example.helsinkimap.specs.api.repositories.LocationRepositoryApi
+import com.example.helsinkimap.specs.api.usecases.ObserveCityActivitiesUseCaseApi
 import com.example.helsinkimap.specs.entity.ActivityDto
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.flow.Flow
@@ -14,9 +15,9 @@ import javax.inject.Inject
 class ObserveCityActivitiesUseCase @Inject constructor(
     private val cityEntertainmentRepositoryApi: CityEntertainmentRepositoryApi,
     private val locationRepository: LocationRepositoryApi
-) {
+) : ObserveCityActivitiesUseCaseApi {
 
-    operator fun invoke(): Flow<List<ActivityDto>> =
+    override fun invoke(): Flow<List<ActivityDto>> =
         locationRepository.observeLocation()
             .filter { newLatLng: LatLng ->
                 val lastCityActivitiesLocation = locationRepository.getCachedLocation()

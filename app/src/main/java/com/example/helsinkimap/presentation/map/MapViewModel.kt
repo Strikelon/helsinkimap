@@ -2,11 +2,11 @@ package com.example.helsinkimap.presentation.map
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
-import com.example.helsinkimap.domain.usecases.ObserveCityActivitiesUseCase
-import com.example.helsinkimap.domain.usecases.ObserveGpsErrorUseCase
-import com.example.helsinkimap.domain.usecases.ObserveLocationUseCase
 import com.example.helsinkimap.presentation.arch.viewmodel.MvvmViewModel
 import com.example.helsinkimap.specs.api.exceptions.LocationDenyPermissionException
+import com.example.helsinkimap.specs.api.usecases.ObserveCityActivitiesUseCaseApi
+import com.example.helsinkimap.specs.api.usecases.ObserveGpsErrorUseCaseApi
+import com.example.helsinkimap.specs.api.usecases.ObserveLocationUseCaseApi
 import com.example.helsinkimap.specs.entity.ActivityDto
 import com.example.helsinkimap.specs.entity.ErrorTypes
 import com.example.helsinkimap.specs.entity.NavigationEvent
@@ -22,9 +22,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MapViewModel @Inject constructor(
-    private val observeCityActivitiesUseCase: ObserveCityActivitiesUseCase,
-    private val observeGpsErrorUseCase: ObserveGpsErrorUseCase,
-    private val observeLocationUseCase: ObserveLocationUseCase,
+    private val observeCityActivitiesUseCase: ObserveCityActivitiesUseCaseApi,
+    private val observeGpsErrorUseCase: ObserveGpsErrorUseCaseApi,
+    private val observeLocationUseCase: ObserveLocationUseCaseApi,
 ) : MvvmViewModel() {
 
     private var cityActivitiesDtoList: List<ActivityDto> = listOf()
@@ -32,7 +32,7 @@ class MapViewModel @Inject constructor(
 
     private var observeLocationJob: Job? = null
     private var observeCityActivitiesJob: Job? = null
-    private var observeGpsErrorJob: Job? = null
+    private var observeGpsError: Job? = null
 
     private val _uiState = MutableStateFlow(MapUIState())
     val uiState: StateFlow<MapUIState> = _uiState
@@ -48,7 +48,7 @@ class MapViewModel @Inject constructor(
         super.detach()
         observeLocationJob?.cancel()
         observeCityActivitiesJob?.cancel()
-        observeGpsErrorJob?.cancel()
+        observeGpsError?.cancel()
     }
 
     private fun observeLocation() {
@@ -91,6 +91,7 @@ class MapViewModel @Inject constructor(
                     }
                 }
                 .collect {
+                    Log.i("InteresTag", "list activity dto = $it")
                     skipSelectedCityActivity()
                     cityActivitiesDtoList = it
                     _uiState.update { currentState: MapUIState ->
@@ -103,7 +104,7 @@ class MapViewModel @Inject constructor(
     }
 
     private fun observeGpsError() {
-        observeGpsErrorJob = viewModelScope.launch {
+        observeGpsError = viewModelScope.launch {
             observeGpsErrorUseCase()
                 .catch {
                     Log.e("Error", "observeGpsErrorUseCase() error $it")
@@ -169,7 +170,7 @@ class MapViewModel @Inject constructor(
     fun errorHandled() {
         _uiState.update { currentState: MapUIState ->
             currentState.copy(
-                error = null
+                error = ErrorTypes.NONE
             )
         }
     }

@@ -106,7 +106,6 @@ dependencies {
     testImplementation lib.junit
     androidTestImplementation lib.junitExt
     androidTestImplementation lib.espresso
-    implementation lib.mockito
-    testImplementation lib.mockitoInline
     testImplementation lib.androidxCoreTesting
+    testImplementation lib.coroutinesTest
 }
