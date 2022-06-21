@@ -31,8 +31,8 @@ class MapViewModel @Inject constructor(
     private var selectedCityActivity: ActivityDto? = null
 
     private var observeLocationJob: Job? = null
-    private var observeCityActivities: Job? = null
-    private var observeGpsError: Job? = null
+    private var observeCityActivitiesJob: Job? = null
+    private var observeGpsErrorJob: Job? = null
 
     private val _uiState = MutableStateFlow(MapUIState())
     val uiState: StateFlow<MapUIState> = _uiState
@@ -47,8 +47,8 @@ class MapViewModel @Inject constructor(
     override fun detach() {
         super.detach()
         observeLocationJob?.cancel()
-        observeCityActivities?.cancel()
-        observeGpsError?.cancel()
+        observeCityActivitiesJob?.cancel()
+        observeGpsErrorJob?.cancel()
     }
 
     private fun observeLocation() {
@@ -80,7 +80,7 @@ class MapViewModel @Inject constructor(
         }
     }
     private fun observeCityActivities() {
-        observeCityActivities = viewModelScope.launch {
+        observeCityActivitiesJob = viewModelScope.launch {
             observeCityActivitiesUseCase()
                 .catch {
                     Log.e("Error", "getActivities() error $it")
@@ -103,7 +103,7 @@ class MapViewModel @Inject constructor(
     }
 
     private fun observeGpsError() {
-        observeGpsError = viewModelScope.launch {
+        observeGpsErrorJob = viewModelScope.launch {
             observeGpsErrorUseCase()
                 .catch {
                     Log.e("Error", "observeGpsErrorUseCase() error $it")
