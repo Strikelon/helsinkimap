@@ -37,7 +37,7 @@ class LocationLocalDataSource @Inject constructor(
     private val mLocationManager =
         context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
-    private var tempLocation: LatLng? = null
+    private var cachedLocation: LatLng? = null
 
     fun observeLocation(): Flow<LatLng> =
         callbackFlow {
@@ -87,11 +87,11 @@ class LocationLocalDataSource @Inject constructor(
     }
         .distinctUntilChanged()
 
-    fun saveTempLocation(latLng: LatLng) {
-        tempLocation = latLng
+    fun cacheLocation(latLng: LatLng) {
+        cachedLocation = latLng
     }
 
-    fun getTempLocation(): LatLng? = tempLocation
+    fun getCachedLocation(): LatLng? = cachedLocation
 
     companion object {
         private const val INTERVAL = 10000L

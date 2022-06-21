@@ -19,16 +19,16 @@ class ObserveCityActivitiesUseCase @Inject constructor(
     operator fun invoke(): Flow<List<ActivityDto>> =
         locationRepository.observeLocation()
             .filter { newLatLng: LatLng ->
-                val lastGetCityActivitiesLocation = locationRepository.getTempLocation()
-                return@filter if (lastGetCityActivitiesLocation != null) {
-                    val distance = newLatLng.calculateDistanceInKilometer(lastGetCityActivitiesLocation)
+                val lastCityActivitiesLocation = locationRepository.getCachedLocation()
+                return@filter if (lastCityActivitiesLocation != null) {
+                    val distance = newLatLng.calculateDistanceInKilometer(lastCityActivitiesLocation)
                     distance >= DEFAULT_ACTIVITIES_RANGE
                 } else {
                     true
                 }
             }
             .flatMapLatest { newLatLng: LatLng ->
-                locationRepository.saveTempLocation(newLatLng)
+                locationRepository.cacheLocation(newLatLng)
                 getCityActivities(newLatLng)
             }
 

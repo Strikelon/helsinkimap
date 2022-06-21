@@ -10,7 +10,7 @@ interface LocationRepositoryApi {
 
     fun observeLocation(): Flow<LatLng>
 
-    fun saveTempLocation(latLng: LatLng)
+    fun cacheLocation(latLng: LatLng)
 
-    fun getTempLocation(): LatLng?
+    fun getCachedLocation(): LatLng?
 }

@@ -12,6 +12,7 @@ import com.example.helsinkimap.specs.entity.ErrorTypes
 import com.example.helsinkimap.specs.entity.NavigationEvent
 import com.example.helsinkimap.specs.uistate.MapUIState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -29,17 +30,29 @@ class MapViewModel @Inject constructor(
     private var cityActivitiesDtoList: List<ActivityDto> = listOf()
     private var selectedCityActivity: ActivityDto? = null
 
+    private var observeLocationJob: Job? = null
+    private var observeCityActivities: Job? = null
+    private var observeGpsError: Job? = null
+
     private val _uiState = MutableStateFlow(MapUIState())
     val uiState: StateFlow<MapUIState> = _uiState
 
-    init {
+    override fun attach() {
+        super.attach()
         observeLocation()
         observeCityActivities()
         observeGpsError()
     }
 
+    override fun detach() {
+        super.detach()
+        observeLocationJob?.cancel()
+        observeCityActivities?.cancel()
+        observeGpsError?.cancel()
+    }
+
     private fun observeLocation() {
-        viewModelScope.launch {
+        observeLocationJob = viewModelScope.launch {
             observeLocationUseCase()
                 .catch {
                     Log.e("Error", "observeLocationFlowable() error $it")
@@ -66,9 +79,8 @@ class MapViewModel @Inject constructor(
                 }
         }
     }
-
     private fun observeCityActivities() {
-        viewModelScope.launch {
+        observeCityActivities = viewModelScope.launch {
             observeCityActivitiesUseCase()
                 .catch {
                     Log.e("Error", "getActivities() error $it")
@@ -91,7 +103,7 @@ class MapViewModel @Inject constructor(
     }
 
     private fun observeGpsError() {
-        viewModelScope.launch {
+        observeGpsError = viewModelScope.launch {
             observeGpsErrorUseCase()
                 .catch {
                     Log.e("Error", "observeGpsErrorUseCase() error $it")
